@@ -1,0 +1,112 @@
+
+
+
+body {
+    background: #1f253d;
+    margin: 0!important;
+    font-family:'Ubuntu',sans-serif;
+}
+
+#menu {
+    background:#394264;
+    margin-top: 75px;
+    border-radius: 7px;
+    margin-bottom: 40px;
+    overflow: hidden;
+}
+
+.body_child {
+    max-width: 1025px;
+    margin: auto;
+}
+#menu ul ,.container1_left ul{
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+#menu ul li span{
+    color:white;
+    font-weight:bold;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    padding-left: 12px;
+
+}
+
+#menu ul li{
+    display: flex;
+    align-items: center;
+    padding-right: 15px;
+    padding-left: 15px;
+
+    transition: ease-in-out 0.3s;
+    cursor: pointer;
+    height: 72px;
+    border-bottom: 4px solid #394264;
+    padding-top: 4px;
+}
+#menu ul li:first-child span{
+    padding-left: 7px;
+}
+#menu ul li:hover{
+    background: #50597b;
+    transition: ease-in-out 0.3s;
+    border-bottom: 4px solid #11a8ab;
+}
+.container1, .container2, .container3{
+    display:none;
+
+}
+.active_container{
+    display:flex !important;
+    
+}
+.container1_left ul{
+    background: #394264;
+    border-radius:7px;
+    display:block;
+}
+.container1_left ul li{
+    padding: 20px 60px;
+    font-size: 20px;
+    cursor:pointer;
+    color: white;
+    text-align: center;
+    border-bottom: 1px solid black;
+    transition: ease-in-out 0.3s;
+}
+.container1_left ul li:last-child{
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    
+}
+.container1_left ul li:hover{
+    background: #50597b;
+    transition: ease-in-out 0.3s;
+}
+.container1_left ul li:first-child{
+    border-top-right-radius: 7px;
+    border-top-left-radius: 7px;
+    
+}
+#container1_box1,#container1_box2,#container1_box3,#container1_box4,#container1_box5{
+       display:none;
+}
+.container1_left {
+    min-width: 30%;
+}
+.container1_right {
+    width: -webkit-fill-available;
+    margin-left: 20px;
+    background: #394264;
+    border-radius: 7px;
+    color:white;
+    border-bottom: 1px solid black;
+}
+.active_item {
+    background: #50597b;
+    border-bottom: 4px solid #8189e5 !important;
+    transition: ease-in-out 0.3s;
+}
