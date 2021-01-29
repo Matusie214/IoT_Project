@@ -2,47 +2,104 @@ import paho.mqtt.client as mqtt
 import time
 import csv
 import datetime
-
+import config as cfg
 
 
 # This is the Subscriber
-broker_ip = "192.168.0.171"
-topic =[ "harmonogram_new","light_salon","heating_switch","grzalka"]
+#broker_ip = "192.168.0.171"
+
 
 def on_connect(client, userdata, flags, rc):
-  print("Connected with result code " + str(rc))
-  client.subscribe(topic[0])
-  client.subscribe(topic[1])
-  client.subscribe(topic[2])
-  client.subscribe(topic[3])
+    print("Connected with result code " + str(rc))
+    for key in cfg.topic:
+        client.subscribe(cfg.topic[key])
 
 def on_message(client, userdata, msg):
-    time=datetime.datetime.now()
+    """
+    Metoda uruchamiana w momencie odebrania wiadomości - zajmuje się zapisem wiadmości zawierającej odczyt z czujników
     
-    now=time.strftime("%d/%m/%Y %H:%M:%S")
+    """
     
+    if msg.topic==cfg.topic["temperatura"]:
     
-    data = str(msg.payload.decode("utf-8"))
+        time=datetime.datetime.now()
+
+        now=time.strftime("%d/%m/%Y %H:%M:%S")
+
+
+        data = str(msg.payload.decode("utf-8"))
+
+        print(data+" "+now)
+        print(userdata)
+        print(msg.topic)
+        plik=open(cfg.path_data_temperature,'a')
+        plik.write(now+","+data)
+        plik.write("\n")
+        plik.close()
     
-    print(data+" "+now)
-    print(userdata)
-    print(msg.topic)
-    plik=open('Mess.csv','a')
-    plik.write(now+","+data)
-    plik.write("\n")
-    plik.close()
+    elif msg.topic==cfg.topic["sila_wiatru"]:
+        time=datetime.datetime.now()
+
+        now=time.strftime("%d/%m/%Y %H:%M:%S")
+
+
+        data = str(msg.payload.decode("utf-8"))
+
+        print(data+" "+now)
+        print(userdata)
+        print(msg.topic)
+        plik=open(cfg.path_data_wiatr_sila,'a')
+        plik.write(now+","+data)
+        plik.write("\n")
+        plik.close()
+        
+    elif msg.topic==cfg.topic["kierunek_wiatru"]:
+        time=datetime.datetime.now()
+
+        now=time.strftime("%d/%m/%Y %H:%M:%S")
+
+
+        data = str(msg.payload.decode("utf-8"))
+
+        print(data+" "+now)
+        print(userdata)
+        print(msg.topic)
+        plik=open(cfg.path_data_wiatr_kierunek,'a')
+        plik.write(now+","+data)
+        plik.write("\n")
+        plik.close()
+        
+    elif msg.topic==cfg.topic["wejście"]:
+        time=datetime.datetime.now()
+
+        now=time.strftime("%d/%m/%Y %H:%M:%S")
+
+
+        data = str(msg.payload.decode("utf-8"))
+
+        print(data+" "+now)
+        print(userdata)
+        print(msg.topic)
+        plik=open(cfg.path_data_entrance,'a')
+        plik.write(now+","+data)
+        plik.write("\n")
+        plik.close()
+        
 
 def save_climate_data():
     client = mqtt.Client()
-    client.connect(broker_ip, 1883)
+    client.connect(cfg.broker_ip, cfg.broker_port)
 
     client.on_connect = on_connect
     client.on_message = on_message
 
     client.loop_forever()
+
+
+    
 def client_mobile():
     client_mobile = mqtt.Client()
-    client_mobile.connect(broker_ip, 1883)
+    client_mobile.connect(cfg.broker_ip, cfg.broker_port)
     client_mobile.publish("dioda","zapal")
     time.sleep(0.10)
     client_mobile.publish("dioda","zgas")

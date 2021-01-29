@@ -1,4 +1,4 @@
-from termostat_con import reg_temp, grzal_con, temp_get
+from termostat_con import reg_temp, grzal_con, temp_get, MenageState
 import threading
 import time
 #from backend_heat import *
@@ -8,11 +8,7 @@ import unittest
 import paho.mqtt.client as mqtt
 
 
-#todo:poiwnno być zaimportowane z termostat_con 
-def change_state(new_state):
-    import config_test_termostat_con
-    config_test_termostat_con.last_state = new_state
-    
+state=MenageState()
 class Temp_Get_Test(unittest.TestCase):
     
    
@@ -38,11 +34,12 @@ class Temp_Get_Test(unittest.TestCase):
 
 
 class Termostat_con_test(unittest.TestCase):
-
+    
 
     
     def test_grzal_con(self):
         """ Test sprawdzający poprawność wysyłanych sygnałów do brokera przez metodę grzal_con (włączenie grzałki """
+        
         
         
         def on_message(client, userdata, message):
@@ -59,8 +56,8 @@ class Termostat_con_test(unittest.TestCase):
         client.loop_start() #start the loop
 
         client.subscribe(cfg.topic_grzalka)
-        change_state(False)
-        grzal_con(True,config=cfg)
+        state.change_state(False)
+        grzal_con(True, state, config=cfg)
         
         #client.publish(cfg.topic_grzalka,cfg.dic["on"])
         time.sleep(4) # wait
@@ -86,8 +83,8 @@ class Termostat_con_test(unittest.TestCase):
         client.loop_start() #start the loop
 
         client.subscribe(cfg.topic_grzalka)
-        change_state(True)
-        grzal_con(False,config=cfg)
+        state.change_state(True)
+        grzal_con(False, state, config=cfg)
         
         #client.publish(cfg.topic_grzalka,cfg.dic["on"])
         time.sleep(4) # wait
@@ -111,10 +108,10 @@ class Termostat_con_test(unittest.TestCase):
         client.loop_start() #start the loop
 
         client.subscribe(cfg.topic_grzalka)
-        change_state(True)
-        grzal_con(True,config=cfg)
-        change_state(False)
-        grzal_con(False,config=cfg)
+        state.change_state(True)
+        grzal_con(True, state, config=cfg)
+        state.change_state(False)
+        grzal_con(False, state, config=cfg)
         #client.publish(cfg.topic_grzalka,cfg.dic["on"])
         time.sleep(4) # wait
         client.loop_stop() #stop the loop
@@ -126,7 +123,7 @@ class Termostat_con_test(unittest.TestCase):
     
     
 class Termostat_con_test2(unittest.TestCase):
-    
+       
     #dodać 2 testy (wył grzałka -> wył, wł grzałka -> wł)
     
     def test_reg_temp(self):
@@ -143,8 +140,8 @@ class Termostat_con_test2(unittest.TestCase):
         client.loop_start() #start the loop
 
         client.subscribe(cfg.topic_grzalka)
-        change_state(False)
-        reg_temp(35.6, config=cfg)
+        state.change_state(False)
+        reg_temp(35.6, state, config=cfg)
         time.sleep(4) # wait
         client.loop_stop() #stop the loop
     
@@ -162,8 +159,8 @@ class Termostat_con_test2(unittest.TestCase):
         client.loop_start() #start the loop
 
         client.subscribe(cfg.topic_grzalka2)
-        change_state(True)
-        reg_temp(22.0, config=cfg)
+        state.change_state(True)
+        reg_temp(22.0, state, config=cfg)
         time.sleep(4) # wait
         client.loop_stop() #stop the loop
         

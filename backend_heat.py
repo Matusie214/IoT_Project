@@ -1,7 +1,8 @@
-from termostat_con import reg_temp, grzal_con
+from termostat_con import reg_temp, grzal_con, MenageState
 import threading
 import time
 import config as cfg
+
 
 global thr
 class StoppableThread(threading.Thread):
@@ -9,11 +10,12 @@ class StoppableThread(threading.Thread):
         Definicja pracy, inicjacji oraz zatrzymania wątków
     """
 
-    def __init__(self, constant_temp=21.0,config=cfg):
+    def __init__(self, constant_temp=21.0, config=cfg):
         super(StoppableThread, self).__init__()
         self._stop_event = threading.Event()
         self.constant_temp = constant_temp
         self.config = config
+        self.state = MenageState()
 
     def stop(self):
         self._stop_event.set()
@@ -25,10 +27,9 @@ class StoppableThread(threading.Thread):
         
     def run(self):
         while not self._stop_event.is_set():
-            reg_temp(self.constant_temp,config=self.config)
-
+            reg_temp(self.constant_temp, self.state, config=self.config)
             
-        grzal_con(False)
+        self.state.change_state(False)
         
        
     

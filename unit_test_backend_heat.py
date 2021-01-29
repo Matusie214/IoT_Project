@@ -7,6 +7,7 @@ import unittest
 import paho.mqtt.client as mqtt
 import config_symulacja 
 import math
+
 def generate_data(path , temp):
     """
     """
@@ -21,7 +22,7 @@ def generate_data(path , temp):
         plik.write("\n")
         plik.close()
 
-def Symuluj(dt=0.1, num_steps=150, init_temp=28.0, config=cfg):
+def Symuluj(state, dt=0.1, num_steps=150, init_temp=28.0, config=cfg):
     """
     Metoda generująca prosty symulator w celu przeprowadzenia testu na wątkach i termostacie
     
@@ -34,18 +35,20 @@ def Symuluj(dt=0.1, num_steps=150, init_temp=28.0, config=cfg):
     
     
     
-    current=temp_get(config.path_data)
+    current=temp_get(config.path_data_temperature)
     for i in range(num_steps):
-        if config.last_state==True:
+        if state.state==True:
             current+=dt
         else:
             current+=-dt
         time.sleep(0.5)
-        plik=open(config.path_data,'a')
+        plik=open(config.path_data_temperature,'a')
         plik.write(","+str(current))
         plik.write("\n")
         plik.close()
-        print("last state: ",config.last_state)
+        print("last state: ",state.state)
+        print("temp: ", current)
+        
     
 
     
@@ -86,17 +89,18 @@ class Set_Temp_Test(unittest.TestCase):
             self.assertEqual(thr.is_alive(),False)
     
     def test_set_temp(self):
-        generate_data(config_symulacja.path_data,24.0)
+        generate_data(config_symulacja.path_data_temperature,24.0)
         thr = StoppableThread(constant_temp=25.0,config=config_symulacja)
         thr.start()
         
-        Symuluj(init_temp=24.5,config=config_symulacja)
+        Symuluj(thr.state ,init_temp=24.5,config=config_symulacja)
         
         thr.join()
-        score=temp_get(config_symulacja.path_data,1000)
+        score=temp_get(config_symulacja.path_data_temperature,1000)
         print(math.ceil(score))
         print(round(score))
         self.assertEqual(round(score),25.0)
+        
 if __name__ == '__main__':
     unittest.main()
  

@@ -4,5 +4,12 @@ path_data_heating="/home/g2pawel_urbanski/Mess.csv"
 topic_grzalka="grzalka_test"
 topic_grzalka2="grzalka_test2"
 dic={"on":"1","off":"0"}
-last_state=True
-path_data="/home/mcezary97/test_temp2.csv"
+path_data_temperature="/home/mcezary97/Temperature.csv"
+path_data_wiatr_sila="/home/mcezary97/WindS.csv"
+path_data_wiatr_kierunek="/home/mcezary97/WindD.csv"
+path_data_entrance="/home/mcezary97/Entrance.csv"
+topic ={ "harmonogram_new":"harmonogram_new",
+        "light_salon":"light_salon",
+        "heating_switch":"heating_switch",
+        "grzalka":"grzalka",
+        "temperatura":"temperatura"}

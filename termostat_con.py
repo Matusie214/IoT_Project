@@ -5,7 +5,15 @@ import math
 import config as cfg
 
 
-topic_grzalka = cfg.topic_grzalka
+topic_grzalka = cfg.topic["temperatura"]
+
+class MenageState():
+    def __init__(self) :
+        self.state=True
+    
+    def change_state(self, new_state):
+        self.state=new_state
+
 
 #metoda odczytująca z pliku temp
 def temp_get(file_name, nb_rows=10):
@@ -43,7 +51,7 @@ def temp_get(file_name, nb_rows=10):
         return np.mean(temps)
     
 
-def grzal_con(flag_on, config=cfg):
+def grzal_con(flag_on, state, config=cfg):
     """metoda sterująca włączeniem i wyłączeniem grzałki
 
     Args:
@@ -54,35 +62,35 @@ def grzal_con(flag_on, config=cfg):
     client_mobile = mqtt.Client()
     client_mobile.connect(config.broker_ip, config.broker_port)
     
-    if flag_on and config.last_state == False:
-        client_mobile.publish(config.topic_grzalka,config.dic["on"])
+    if flag_on and state.state == False:
+        client_mobile.publish(config.topic["temperatura"],config.dic["on"])
         #print(1)
-        change_state(True)
+        state.change_state(True)
         
-    elif flag_on == False and config.last_state ==True:
-        client_mobile.publish(config.topic_grzalka,config.dic["off"])
+    elif flag_on == False and state.state ==True:
+        client_mobile.publish(config.topic["temperatura"],config.dic["off"])
         #print(0)
-        change_state(False)
+        state.change_state(False)
         
 
         
-def change_state(new_state):
-    """
+"""def change_state(new_state):
+    
     metoda zajmująca się zmianą flagi oznaczającą aktualny stan grzałki
 
     Args:
         new_state: nowy oczekiwany stan grzałki zapisywany do pliku konfiguracyjnego
-    """
+    
     #import config_test_termostat_con
     #config_test_termostat_con.last_state = new_state
     import config_symulacja
     config_symulacja.last_state = new_state
-    
-    
-    
+"""    
+        
+        
 #pętla zwrotna utrzymująca temp
 # to do : obsługa wyjątku - w momencie otrzymania z czujnika nan
-def reg_temp(target_temp,config=cfg):
+def reg_temp(target_temp, state, config=cfg):
     """
     Metoda określająca który komunikat pracy grzałki nadać do borkera
 
@@ -90,15 +98,15 @@ def reg_temp(target_temp,config=cfg):
         target_temp:  temperatura którą chcemy osiągnąć poprzez odczyt z czujnika
         current_temp: temperatura aktualnie odczytywana z czujnika
     """
-    current_temp = temp_get(config.path_data)
+    current_temp = temp_get(config.path_data_temperature, nb_rows=2)
     
     if target_temp > current_temp:
         #grzałka włącz
-        grzal_con(True,config=config)
+        grzal_con(True, state, config=config)
         #print("true")
     else:
-        grzal_con(False,config=config)
+        grzal_con(False, state, config=config)
         #print("false")
         #grzałka wyłącz
         
-reg_temp(2.0)        
+#reg_temp(2.0)        
