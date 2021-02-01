@@ -1,9 +1,11 @@
-from termostat_con import reg_temp, grzal_con, temp_get, MenageState
+import sys
+sys.path.append('../../')
+from src.termostat_con import reg_temp, grzal_con, temp_get, MenageState
 import threading
 import time
 #from backend_heat import *
 #import backend_heat.StoppableThread
-import config_test_termostat_con as cfg
+import src.Configs.config_test_termostat_con as cfg
 import unittest
 import paho.mqtt.client as mqtt
 
@@ -14,22 +16,22 @@ class Temp_Get_Test(unittest.TestCase):
    
     def test_x(self):
         """ test z plikiem posiadającym same wartości typu String """        
-        self.assertRaises(ValueError, temp_get, "/home/mcezary97/test_temp3.csv")
+        self.assertRaises(ValueError, temp_get, "./../../Data/test_temp3.csv")
         
     def test_y(self):
         """ test sprawdzający poprawność działania funkcji odczytu metody """        
-        avg_temp = temp_get("/home/mcezary97/test_temp.csv",nb_rows=3)
+        avg_temp = temp_get("./../../Data/test_temp.csv",nb_rows=3)
         self.assertEqual(avg_temp,28.5)
         
     def test_z(self):
         """ test z plikiem posiadającym wartości nan """        
-        avg_temp = temp_get("/home/mcezary97/test_temp4.csv",nb_rows=10)
+        avg_temp = temp_get("./../../Data/test_temp4.csv",nb_rows=10)
         self.assertEqual(avg_temp,30.0)
         
 
     def test_zx(self):
         """ test z plikiem posiadającym mniej rekordów niż wymagana liczba podana w żądaniu """        
-        avg_temp = temp_get("/home/mcezary97/test_temp5.csv",nb_rows=2)
+        avg_temp = temp_get("./../../Data/test_temp5.csv",nb_rows=2)
         self.assertEqual(avg_temp,30.0)
 
 

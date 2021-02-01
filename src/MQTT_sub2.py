@@ -1,8 +1,10 @@
+import sys
+sys.path.append('../')
 import paho.mqtt.client as mqtt
 import time
 import csv
 import datetime
-import config as cfg
+import src.Configs.config as cfg
 
 
 # This is the Subscriber

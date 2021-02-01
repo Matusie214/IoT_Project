@@ -1,8 +1,10 @@
+import sys
+sys.path.append('../../')
 from collections import deque
 import paho.mqtt.client as mqtt
 import numpy as np
 import math 
-import config as cfg
+import src.Configs.config as cfg
 
 
 topic_grzalka = cfg.topic["temperatura"]

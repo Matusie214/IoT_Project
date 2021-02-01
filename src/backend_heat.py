@@ -1,7 +1,9 @@
-from termostat_con import reg_temp, grzal_con, MenageState
+import sys
+sys.path.append('../')
+from src.termostat_con import reg_temp, grzal_con, MenageState
 import threading
 import time
-import config as cfg
+import src.Configs.config as cfg
 
 
 global thr

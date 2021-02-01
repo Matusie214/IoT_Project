@@ -1,11 +1,13 @@
-from backend_heat import turn_off, set_temp, StoppableThread
-from termostat_con import temp_get
+import sys
+sys.path.append('../../')
+from src.backend_heat import turn_off, set_temp, StoppableThread
+from src.termostat_con import temp_get
 import threading
 import time
-import config_test_termostat_con as cfg
+import src.Configs.config_test_termostat_con as cfg
 import unittest
 import paho.mqtt.client as mqtt
-import config_symulacja 
+import src.Configs.config_symulacja 
 import math
 
 def generate_data(path , temp):
@@ -89,14 +91,14 @@ class Set_Temp_Test(unittest.TestCase):
             self.assertEqual(thr.is_alive(),False)
     
     def test_set_temp(self):
-        generate_data(config_symulacja.path_data_temperature,24.0)
-        thr = StoppableThread(constant_temp=25.0,config=config_symulacja)
+        generate_data(src.Configs.config_symulacja.path_data_temperature,24.0)
+        thr = StoppableThread(constant_temp=25.0,config=src.Configs.config_symulacja)
         thr.start()
         
-        Symuluj(thr.state ,init_temp=24.5,config=config_symulacja)
+        Symuluj(thr.state ,init_temp=24.5,config=src.Configs.config_symulacja)
         
         thr.join()
-        score=temp_get(config_symulacja.path_data_temperature,1000)
+        score=temp_get(src.Configs.config_symulacja.path_data_temperature,1000)
         print(math.ceil(score))
         print(round(score))
         self.assertEqual(round(score),25.0)

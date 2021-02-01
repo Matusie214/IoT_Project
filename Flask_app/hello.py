@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sys 
-sys.path.append("/home/mcezary97/")
-from termostat_con import temp_get
+sys.path.append("../")
+from src.termostat_con import temp_get
 
 app = Flask(__name__)
 
