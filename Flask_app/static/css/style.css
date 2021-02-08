@@ -91,7 +91,7 @@ body {
     border-top-left-radius: 7px;
     
 }
-#container1_box1,#container1_box2,#container1_box3,#container1_box4,#container1_box5{
+#container1_box1,#container1_box2,#container1_box3,#container1_box4,#container1_box5,#container1_box6,#container1_box7{
        display:none;
 }
 .container1_left {
@@ -110,3 +110,11 @@ body {
     border-bottom: 4px solid #8189e5 !important;
     transition: ease-in-out 0.3s;
 }
+
+
+
+
+
+
+
+

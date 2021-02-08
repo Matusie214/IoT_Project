@@ -5,12 +5,16 @@
     <title>Panel dostępu sterowania</title>
     <link rel="icon" href="/static/img/favicon.png">
     <link rel = "stylesheet" href = "/static/css/style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <script
   src="https://code.jquery.com/jquery-3.5.1.min.js"
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
   crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	
 </head>
 <body>
     <div class="body_child">
@@ -29,41 +33,74 @@
             <ul>
                 <li id="container1_item1">Temperatura</li>
                 <li id="container1_item2">Wilgotność</li>
-                <li id="container1_item3">Czujniki ruchu</li>
+                <li id="container1_item3">Co2</li>
                 <li id="container1_item4">Poziom wypełnienia</li>
-                <li id="container1_item5">Otwarte okno</li>
+                <li id="container1_item5">Czujnik ruchu</li>
+                <li id="container1_item6">Kierunek wiatru</li>
+                <li id="container1_item7">Siła wiatru</li>
             </ul>
         </div>
         <div class="container1_right">
             <div>
-                <div id="container1_box1" class="active_container">Aktualna temperatura wynosi {{temp}}</div>
-                <div id="container1_box2">2</div>
-                <div id="container1_box3">3</div>
-                <div id="container1_box4">4</div>
-                <div id="container1_box5">5</div>
+                <div id="container1_box1" class="active_container">
+                    Temperatura wynosi: 
+                    <p id=result>
+                        {{temp}}°C
+                    </p>
+                
+                
+                <canvas id="myChart" width="400" height="400"></canvas>
+                
+ 
+                </div>
+                <div id="container1_box2">
+                    Aktualna wilgotność wynosi:
+                    <p id=result2>
+                        {{hum}}
+                    </p>
+                </div>
+                
+                <div id="container1_box3">
+                    Aktualny poziom Co2 :
+                    <p id=result4>
+                        {{co2}}
+                    </p>
+                </div>
+                
+                <div id="container1_box4">
+                    Aktualny procent wypełnienia:
+                    <p id=result5>{{percent}}</p>
+                </div>
+                
+                <div id="container1_box5">
+                    Stan czujnika schodów: 
+                    <p id=result3>
+                        {{move}}
+                    </p>
+                </div>
+                
+                <div id="container1_box6">
+                    Kierunek wiatru to:
+                    <p id=result6>
+                    {{direction}}
+                    </p>
+                </div>
+                
+                <div id="container1_box7">
+                    Siła wiatru to:
+                    <p id=result7>
+                    {{strenght}}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
     <div class="container2">2</div>
     <div class="container3">3</div>
 
-
-
-
-
-
-            
-            
-            
-            
-    
-            <h1>zmiana temperatury</h1>
-            <h1>
-        <input type="submit" name="submit_button" value="Do Something">
-        <input type="submit" name="submit_button" value="Do Something Else">
-
-
     </div>
+    
+    
             <script>
                 $("#menu_item1").click(function(){
               $(this).addClass("active_item");
@@ -105,35 +142,94 @@
                   $("#container1_box3").removeClass("active_container");
                   $("#container1_box4").removeClass("active_container");
                   $("#container1_box5").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
                 });
+                
                 $("#container1_item2").click(function(){
                   $("#container1_box2").addClass("active_container");
                   $("#container1_box1").removeClass("active_container");
                   $("#container1_box3").removeClass("active_container");
                   $("#container1_box4").removeClass("active_container");
                   $("#container1_box5").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
                 });
+                
                 $("#container1_item3").click(function(){
                   $("#container1_box3").addClass("active_container");
-                  $("#container1_box2").removeClass("active_container");
                   $("#container1_box1").removeClass("active_container");
+                  $("#container1_box2").removeClass("active_container");
                   $("#container1_box4").removeClass("active_container");
                   $("#container1_box5").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
                 });
+                
                 $("#container1_item4").click(function(){
                   $("#container1_box4").addClass("active_container");
+                  $("#container1_box1").removeClass("active_container");
                   $("#container1_box2").removeClass("active_container");
                   $("#container1_box3").removeClass("active_container");
-                  $("#container1_box1").removeClass("active_container");
                   $("#container1_box5").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
                 });
+                
                 $("#container1_item5").click(function(){
                   $("#container1_box5").addClass("active_container");
+                  $("#container1_box1").removeClass("active_container");
                   $("#container1_box2").removeClass("active_container");
                   $("#container1_box3").removeClass("active_container");
                   $("#container1_box4").removeClass("active_container");
-                  $("#container1_box1").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
                 });
+                
+                $("#container1_item6").click(function(){
+                  $("#container1_box6").addClass("active_container");
+                  $("#container1_box1").removeClass("active_container");
+                  $("#container1_box2").removeClass("active_container");
+                  $("#container1_box3").removeClass("active_container");
+                  $("#container1_box4").removeClass("active_container");
+                  $("#container1_box5").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
+                });
+                
+                $("#container1_item7").click(function(){
+                  $("#container1_box7").addClass("active_container");
+                  $("#container1_box1").removeClass("active_container");
+                  $("#container1_box2").removeClass("active_container");
+                  $("#container1_box3").removeClass("active_container");
+                  $("#container1_box4").removeClass("active_container");
+                  $("#container1_box5").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                });
+                
                 </script>
+        <script src="/static/js/script.js" ></script>
+        <script type=text/javascript>
+
+
+            
+            let temperatureUpdate = setInterval(function sayHi() {
+                  $.getJSON('/background_process', function(data) {
+                        $("#result").text(data.temperature);
+                        });
+                }, 2000)
+            let humidityUpdate = setInterval(function sayHi2() {
+                  $.getJSON('/background_process', function(data) {
+                        $("#result2").text(data.humidity);
+                      
+                        });
+                }, 2000)
+            let movementUpdate = setInterval(function sayHi3() {
+                  $.getJSON('/background_process', function(data) {
+                        $("#result3").text(data.movement);
+                      
+                        });
+                }, 500)
+       
+	</script>
 </body>
 </html>

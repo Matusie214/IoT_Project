@@ -12,6 +12,7 @@ import math
 
 def generate_data(path , temp):
     """
+    Metoda generująca wstępną temperaturę do testowania pracy grzałki
     """
     
     fileVariable = open(path, 'r+')

@@ -17,8 +17,9 @@ class MenageState():
         self.state=new_state
 
 
+
 #metoda odczytująca z pliku temp
-def temp_get(file_name, nb_rows=10):
+def temp_get(file_name, nb_rows=2):
     """
     Metoda ustalająca temperaturę poprzez odczytanie 10 rekordów temperatury do wyciągnięcia średniej wyniku
 
@@ -50,7 +51,7 @@ def temp_get(file_name, nb_rows=10):
     if math.isnan(np.mean(temps)):
         raise ValueError("wszystkie wartosci nan")
     else:
-        return np.mean(temps)
+        return round(np.mean(temps),nb_rows)
     
 
 def grzal_con(flag_on, state, config=cfg):
