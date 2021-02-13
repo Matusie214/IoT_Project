@@ -5,8 +5,10 @@ import time
 import csv
 import datetime
 import src.Configs.config as cfg
+import pymongo
+myclient = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
 
-
+mydb = myclient["smart_home_data"]
 # This is the Subscriber
 #broker_ip = "192.168.0.171"
 
@@ -17,6 +19,17 @@ def on_connect(client, userdata, flags, rc):
     for key in cfg.topic:
         client.subscribe(cfg.topic[key])
 
+def log_data(collection_name, msg, key):
+    time=datetime.datetime.now()
+    now=time.strftime("%d/%m/%Y %H:%M:%S")
+    data = str(msg.payload.decode("utf-8"))
+    hum_log={
+            "time": now,
+            key: float(data)
+            }
+    myCol=mydb[collection_name]
+    x=myCol.insert_one(hum_log)
+        
 def on_message(client, userdata, msg):
     """
     Metoda uruchamiana w momencie odebrania wiadomości - zajmuje się zapisem wiadmości zawierającej odczyt z czujników
@@ -58,21 +71,9 @@ def on_message(client, userdata, msg):
         plik.close()
         
     elif msg.topic==cfg.topic["wilgotnosc"]:
-        time=datetime.datetime.now()
-
-        now=time.strftime("%d/%m/%Y %H:%M:%S")
-
-
-        data = str(msg.payload.decode("utf-8"))
-
-        print(data+" "+now)
-        print(userdata)
-        print(msg.topic)
-        plik=open(cfg.path_data_wilgotnosc,'a')
-        plik.write(now+","+data)
-        plik.write("\n")
-        plik.close()
-        
+        log_data(cfg.collections["humidity"], msg, "wilgotnosc")
+      
+       
     elif msg.topic==cfg.topic["kierunek_wiatru"]:
         time=datetime.datetime.now()
 

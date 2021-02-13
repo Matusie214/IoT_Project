@@ -30,6 +30,13 @@ topic ={ "harmonogram_new":"harmonogram_new",
 
 
 
+collections={
+ "humidity":"wilgotnosc"   
+    
+}
+
+
+
 
 
 path2_data_temperature="./../Data/Temperature.csv"
