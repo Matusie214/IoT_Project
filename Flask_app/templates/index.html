@@ -45,8 +45,8 @@
                 <div id="container1_box1" class="active_container">
                     Temperatura wynosi: 
                     <p id=result>
-                        {{temp}}°C
-                    </p>
+                        {{temp}}
+                    </p>°C
                 
                 
                 <canvas id="myChart" width="400" height="400"></canvas>
@@ -212,23 +212,47 @@
 
 
             
-            let temperatureUpdate = setInterval(function sayHi() {
-                  $.getJSON('/background_process', function(data) {
+            //let temperatureUpdate = setInterval(function sayHi() {
+            //      $.getJSON('/background_process', function(data) {
+              //          $("#result").text(data.temperature);
+             //           });
+              //  }, 1000)
+            //let humidityUpdate = setInterval(function sayHi2() {
+              //    $.getJSON('/background_process', function(data) {
+             //           $("#result2").text(data.humidity);
+                      
+//                         });
+//                 }, 1000)
+//             let movementUpdate = setInterval(function sayHi3() {
+//                   $.getJSON('/background_process', function(data) {
+//                         $("#result3").text(data.movement);
+                      
+//                         });
+//                 }, 100)
+           // let Co2Update = setInterval(function sayHi4() {
+             //     $.getJSON('/background_process', function(data) {
+               //         $("#result").text(data.Co2);
+                 //       });
+       //         }, 2000)
+ const box1 = document.querySelector('#container1_box1');
+ const box2 = document.querySelector('#container1_box2');
+                    
+ let updateCheck = setInterval(function updateProperty() {
+        
+     if(box1.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
                         $("#result").text(data.temperature);
                         });
-                }, 2000)
-            let humidityUpdate = setInterval(function sayHi2() {
-                  $.getJSON('/background_process', function(data) {
+                }
+      else if(box2.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
                         $("#result2").text(data.humidity);
-                      
                         });
-                }, 2000)
-            let movementUpdate = setInterval(function sayHi3() {
-                  $.getJSON('/background_process', function(data) {
-                        $("#result3").text(data.movement);
-                      
-                        });
-                }, 500)
+                }
+                  
+                }, 1000)
        
 	</script>
 </body>

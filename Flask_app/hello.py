@@ -10,18 +10,19 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-"""
-metoda tworząca stronę główną webowej aplikacji 
+    """
+    metoda tworząca stronę główną webowej aplikacji 
     
     Args:
     temp -> zmienna przetrzymująca temperaturę dla pierwszego uruchomienia strony
     hum -> zmienna przetrzymująca wilgotność dla pierwszego uruchomienia strony
     move -> zmienna przetrzymująca stan czujnika ruchu dla pierwszego uruchomienia strony
-"""
+    """
     temp = temp_get("../Data/Temperature.csv")
     hum= temp_get("../Data/Wilgotnosc.csv")
     move=temp_get("../Data/Entrance.csv")
-""" if request.method == 'POST':
+    co2=temp_get("../Data/Co2.csv")
+    """ if request.method == 'POST':
 
         if request.form['submit_button'] == 'Do Something':
             print("włącz termostat", file=sys.stderr) 
@@ -34,8 +35,8 @@ metoda tworząca stronę główną webowej aplikacji
     
         else:
             pass # unknown
-"""
-    return render_template('index.html', temp = temp, hum=hum,move=move )
+    """
+    return render_template('index.html', temp = temp, hum=hum,move=move,co2=co2 )
 
 @app.route('/termostat')
 def index2():
@@ -54,13 +55,13 @@ def background_process():
     """
     if temp_get("../Data/Entrance.csv",nb_rows=1)==1:
         return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"),
-                       movement="wykryto aktywność")
+                       movement="wykryto aktywność",co2=temp_get("../Data/Co2.csv",nb_rows=1))
     elif temp_get("../Data/Entrance.csv",nb_rows=1)==0:
         return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"),
-                       movement="brak aktywności")
+                       movement="brak aktywności",co2=temp_get("../Data/Co2.csv",nb_rows=1))
     else:
         return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"),
-                       movement=temp_get("../Data/Entrance.csv",nb_rows=1))
+                       movement=temp_get("../Data/Entrance.csv",nb_rows=1),Co2=temp_get("../Data/Co2.csv",nb_rows=1))
    
     
     #return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"))
