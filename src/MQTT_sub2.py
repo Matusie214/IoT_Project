@@ -29,6 +29,8 @@ def log_data(collection_name, msg, key):
             }
     myCol=mydb[collection_name]
     x=myCol.insert_one(hum_log)
+    print(data)
+    print(hum_log)
         
 def on_message(client, userdata, msg):
     """
@@ -54,88 +56,57 @@ def on_message(client, userdata, msg):
         plik.write("\n")
         plik.close()
     
-    elif msg.topic==cfg.topic["sila_wiatru"]:
-        time=datetime.datetime.now()
-
-        now=time.strftime("%d/%m/%Y %H:%M:%S")
-
-
-        data = str(msg.payload.decode("utf-8"))
-
-        print(data+" "+now)
-        print(userdata)
-        print(msg.topic)
-        plik=open(cfg.path_data_wiatr_sila,'a')
-        plik.write(now+","+data)
-        plik.write("\n")
-        plik.close()
+    elif msg.topic==cfg.topics["tempterature_out"]:
+        data=str(msg.payload.decode("utf-8"))
+        print(data)
+        log_data(cfg.collections["tempterature_out"], data, "temperatura_zew")
         
-    elif msg.topic==cfg.topic["wilgotnosc"]:
-        log_data(cfg.collections["humidity"], msg, "wilgotnosc")
-      
+    
+    elif msg.topic==cfg.topics["temperature_in"]:
+        log_data(cfg.collections["temperature_in"], msg, "temperatura_wew")
+        
+    elif msg.topic==cfg.topics["wind_str"]:
+        log_data(cfg.collections["wind_str"], msg, "sila_wiatru")
+    
+    elif msg.topic==cfg.topics["humidity_out"]:
+        log_data(cfg.collections["humidity_out"], msg, "wilgotnosc_zew")
+    
+    elif msg.topic==cfg.topics["humidity_in"]:
+        log_data(cfg.collections["humidity_in"], msg, "wilgotnosc_wew")
+  
        
-    elif msg.topic==cfg.topic["kierunek_wiatru"]:
-        time=datetime.datetime.now()
-
-        now=time.strftime("%d/%m/%Y %H:%M:%S")
-
-
-        data = str(msg.payload.decode("utf-8"))
-
-        print(data+" "+now)
-        print(userdata)
-        print(msg.topic)
-        plik=open(cfg.path_data_wiatr_kierunek,'a')
-        plik.write(now+","+data)
-        plik.write("\n")
-        plik.close()
+    elif msg.topic==cfg.topics["kierunek_wiatru"]:
+        #obróbka danych przed wysłaniem
+        log_data(cfg.collections["wind_dir"], msg, "kierunek_wiatru")
         
-    elif msg.topic==cfg.topic["pir_stairs_1"]:
-        time=datetime.datetime.now()
+    elif msg.topic==cfg.topics["pir_door"]:
+        log_data(cfg.collections["pir_door"], msg, "pir_drzwi")
+   
+    elif msg.topic==cfg.topics["pir_salon"]:
+        log_data(cfg.collections["pir_salon"], msg, "pir_salon")
 
-        now=time.strftime("%d/%m/%Y %H:%M:%S")
+    elif msg.topic==cfg.topics["pir_garage"]:
+        log_data(cfg.collections["pir_garage"], msg, "pir_garaz")
+ 
+    elif msg.topic==cfg.topics["co2_in"]:
+        log_data(cfg.collections["co2_in"], msg, "co2_wew")
 
-
-        data = str(msg.payload.decode("utf-8"))
-
+    elif msg.topic==cfg.topics["co2_out"]:
+        log_data(cfg.collections["co2_out"], msg, "co2_zew")
+    
+    elif msg.topic==cfg.topics["gateway_rswitch"]:
+        log_data(cfg.collections["gateway_rswitch"], msg, "kontaktron_brama")
+        
+    elif msg.topic==cfg.topics["door_rswitch"]:
+        log_data(cfg.collections["door_rswitch"], msg, "kontaktron_drzwi")
+    
+    elif msg.topic==cfg.topics["RFID"]:
+        log_data(cfg.collections["RFID"], msg, "RFID")
+    
+    elif msg.topic==cfg.topics["light_out"]:
+        log_data(cfg.collections["light_out"], msg, "swiatlo_zew")
         print(data+" "+now)
-        print(userdata)
-        print(msg.topic)
-        plik=open(cfg.path_data_entrance,'a')
-        plik.write(now+","+data)
-        plik.write("\n")
-        plik.close()
-    elif msg.topic==cfg.topic["co2"]:
-        time=datetime.datetime.now()
 
-        now=time.strftime("%d/%m/%Y %H:%M:%S")
-
-
-        data = str(msg.payload.decode("utf-8"))
-
-        print(data+" "+now)
-        print(userdata)
-        print(msg.topic)
-        plik=open(cfg.path_data_co2,'a')
-        plik.write(now+","+data)
-        plik.write("\n")
-        plik.close()
-
-    elif msg.topic==cfg.topic["gateway_rswitch"]:
-        time=datetime.datetime.now()
-
-        now=time.strftime("%d/%m/%Y %H:%M:%S")
-
-
-        data = str(msg.payload.decode("utf-8"))
-
-        print(data+" "+now)
-        print(userdata)
-        print(msg.topic)
-        plik=open(cfg.path_data_gate,'a')
-        plik.write(now+","+data)
-        plik.write("\n")
-        plik.close()
 
 def save_climate_data():
     client = mqtt.Client()

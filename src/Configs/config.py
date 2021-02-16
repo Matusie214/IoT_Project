@@ -28,10 +28,41 @@ topic ={ "harmonogram_new":"harmonogram_new",
        "gateway_rswitch":"gateway_rswitch"}
 
 
-
+topics={
+    "humidity_out":"humidity_out",
+    "humidity_in":"humidity_in",
+    "tempterature_out":"tempterature_out",
+    "temperature_in":"temperature_in",
+    "co2_out":"co2_out",
+    "co2_in":"co2_in",
+    "gateway_rswitch":"gateway_rswitch",
+    "door_rswitch":"door_rswitch",
+    "light_out":"light_out",
+    "pir_door":"pir_door",
+    "pir_salon":"pir_salon",
+    "pir_garage":"pir_garage",
+    "RFID":"RFID",
+    "wind_dir":"wind_dir",
+    "wind_str":"wind_str",
+    "heating_switch":"heating_switch"
+}
 
 collections={
- "humidity":"wilgotnosc"   
+    "humidity_out":"wilgotnosc_zew",
+    "humidity_in":"wilgotnosc_wew",
+    "tempterature_out":"temperatura_zew",
+    "temperature_in":"temperatura_wew",
+    "co2_out":"co2_zew",
+    "co2_in":"co2_wew",
+    "gateway_rswitch":"kontaktron_brama",
+    "door_rswitch":"kontaktron_drzwi",
+    "light_out":"swiatlo_zew",
+    "pir_door":"pir_drzwi",
+    "pir_salon":"pir_salon",
+    "pir_garage":"pir_garaz",
+    "RFID":"RFID",
+    "wind_dir":"wiatr_kierunek",
+    "wind_str":"wiatr_sila"
     
 }
 
