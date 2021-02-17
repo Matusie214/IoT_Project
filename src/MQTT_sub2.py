@@ -6,9 +6,33 @@ import csv
 import datetime
 import src.Configs.config as cfg
 import pymongo
-myclient = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
 
-mydb = myclient["smart_home_data"]
+class Mongo_log():
+    def __init__ (self, mongo_adress, db_name):
+        self.mongo_adress=mongo_adress
+        self.db_name=db_name
+        self.my_client=pymongo.MongoClient(self.mongo_adress)
+        self.my_db=self.my_client[self.db_name]
+        
+    def log_data(self, collection_name, msg, key):
+        
+        time=datetime.datetime.now()
+        now=time.strftime("%d/%m/%Y %H:%M:%S")
+        #data = str(msg.payload.decode("utf-8"))
+        data=str(msg)
+        hum_log={
+                "time": now,
+                key: float(data)
+                }
+        myCol=self.my_db[collection_name]
+        x=myCol.insert_one(hum_log)
+        
+
+
+    
+
+
+
 # This is the Subscriber
 #broker_ip = "192.168.0.171"
 
@@ -19,18 +43,7 @@ def on_connect(client, userdata, flags, rc):
     for key in cfg.topic:
         client.subscribe(cfg.topic[key])
 
-def log_data(collection_name, msg, key):
-    time=datetime.datetime.now()
-    now=time.strftime("%d/%m/%Y %H:%M:%S")
-    data = str(msg.payload.decode("utf-8"))
-    hum_log={
-            "time": now,
-            key: float(data)
-            }
-    myCol=mydb[collection_name]
-    x=myCol.insert_one(hum_log)
-    print(data)
-    print(hum_log)
+
         
 def on_message(client, userdata, msg):
     """
