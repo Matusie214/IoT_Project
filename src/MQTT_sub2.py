@@ -92,7 +92,7 @@ def on_message(client, userdata, msg):
         mongo.log_data(cfg.collections["humidity_in"], msg, "wilgotnosc_wew")
   
        
-    elif msg.topic==cfg.topics["kierunek_wiatru"]:
+    elif msg.topic==cfg.topics["wind_dir"]:
         #obróbka danych przed wysłaniem
         mongo.log_data(cfg.collections["wind_dir"], msg, "kierunek_wiatru")
         

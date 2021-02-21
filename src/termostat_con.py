@@ -5,8 +5,10 @@ import paho.mqtt.client as mqtt
 import numpy as np
 import math 
 import src.Configs.config as cfg
+from src.MQTT_sub2 import Mongo_log
+import pymongo
 
-
+mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_data")
 topic_grzalka = cfg.topic["temperatura"]
 
 class MenageState():
@@ -19,7 +21,7 @@ class MenageState():
 
 
 #metoda odczytująca z pliku temp
-def temp_get(file_name, nb_rows=2):
+def temp_get(coll_name, nb_rows=2, mongodb=mongo):
     """
     Metoda ustalająca temperaturę poprzez odczytanie 10 rekordów temperatury do wyciągnięcia średniej wyniku
 
@@ -31,27 +33,37 @@ def temp_get(file_name, nb_rows=2):
     Return:
         Zwraca sumę elementów tablicy rekordów temperatury
     """
-    with open(file_name) as temp_file:
-        rows=deque(temp_file,nb_rows)
-#    print(list(rows))
-
-    temps=[]
-    for row in list(rows):
-        try:
-            record=float(row.split(',')[1].strip('\n'))
-            if not math.isnan(record):
-                temps.append(record)
-        except ValueError:
-            pass      
-#   print(temps)
+    myCol=mongodb.my_db[coll_name]
+    print(myCol.find().limit(5))
+        for x in myCol.find().sort("time",-1).limit(5):
+            
+            print(x)
+    
+        rows=list(myCol.find().sort("time",-1).limit(nb_rows))
         
     
-#   print(np.mean(temps))
-    """ obsługa wyjątków -> w pliku znajdują się same odczyty nan"""   
-    if math.isnan(np.mean(temps)):
-        raise ValueError("wszystkie wartosci nan")
-    else:
-        return round(np.mean(temps),nb_rows)
+    
+    if coll_name!="wind_dir":
+        
+        temps=[]
+        for row in rows:
+            try:
+                record=float(row.split(',')[1].strip('\n'))
+                if not math.isnan(record):
+                    temps.append(record)
+            except ValueError:
+                pass      
+    #   print(temps)
+
+
+    #   print(np.mean(temps))
+     #obsługa wyjątków -> w pliku znajdują się same odczyty nan  
+        if math.isnan(np.mean(temps)):
+            raise ValueError("wszystkie wartosci nan")
+        else:
+            return round(np.mean(temps),nb_rows)
+    else: 
+        return rows[0][list(rows[0].keys())[2]]
     
 
 def grzal_con(flag_on, state, config=cfg):

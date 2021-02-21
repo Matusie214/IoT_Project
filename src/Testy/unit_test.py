@@ -20,18 +20,18 @@ class Temp_Get_Test(unittest.TestCase):
         
     def test_y(self):
         """ test sprawdzający poprawność działania funkcji odczytu metody """        
-        avg_temp = temp_get("./../../Data/test_temp.csv",nb_rows=3)
+        avg_temp = temp_get(coll_name="test_temp_coll_1",nb_rows=3)
         self.assertEqual(avg_temp,28.5)
         
     def test_z(self):
         """ test z plikiem posiadającym wartości nan """        
-        avg_temp = temp_get("./../../Data/test_temp4.csv",nb_rows=10)
+        avg_temp = temp_get(coll_name="test_temp_coll_4",nb_rows=10)
         self.assertEqual(avg_temp,30.0)
         
 
     def test_zx(self):
         """ test z plikiem posiadającym mniej rekordów niż wymagana liczba podana w żądaniu """        
-        avg_temp = temp_get("./../../Data/test_temp5.csv",nb_rows=2)
+        avg_temp = temp_get(coll_name="test_temp_coll_5.csv",nb_rows=2)
         self.assertEqual(avg_temp,30.0)
 
 
