@@ -33,9 +33,9 @@ def displayTemp():
     while True:
         time.sleep(1)
     
-        temp = temp_get("./../Data/Temperature.csv")
-        hum = temp_get("./../Data/Wilgotnosc.csv")
-        move = temp_get("./../Data/Entrance.csv")
+        temp = temp_get("temperatura_zew")
+        hum = temp_get("wilgotnosc_zew")
+        move = temp_get("kontaktron_bramka")
         print(temp)
         blynk.virtual_write(0,'{:.2f}'.format(temp))
         blynk.virtual_write(1,'{:.2f}'.format(hum))
