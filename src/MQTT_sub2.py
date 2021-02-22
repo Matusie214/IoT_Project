@@ -15,6 +15,7 @@ class Mongo_log():
         self.my_db=self.my_client[self.db_name]
         
     def log_data(self, collection_name, msg, key):
+        print(msg.topic)
         print(str(msg.payload.decode("utf-8")))
         time=datetime.datetime.now()
         now=time.strftime("%d/%m/%Y %H:%M:%S")
@@ -73,9 +74,9 @@ def on_message(client, userdata, msg):
         plik.write("\n")
         plik.close()
     
-    elif msg.topic==cfg.topics["tempterature_out"]:
+    elif msg.topic==cfg.topics["temperature_out"]:
         
-        mongo.log_data(cfg.collections["tempterature_out"], msg, "temperatura_zew")
+        mongo.log_data(cfg.collections["temperature_out"], msg, "temperatura_zew")
         
     
     elif msg.topic==cfg.topics["temperature_in"]:
@@ -112,7 +113,10 @@ def on_message(client, userdata, msg):
         mongo.log_data(cfg.collections["co2_out"], msg, "co2_zew")
     
     elif msg.topic==cfg.topics["gateway_rswitch"]:
-        mongo.log_data(cfg.collections["gateway_rswitch"], msg, "kontaktron_brama")
+        mongo.log_data(cfg.collections["gateway_rswitch"], msg, "kontaktron_bramka")
+    
+    elif msg.topic==cfg.topics["gate_rswitch"]:
+        mongo.log_data(cfg.collections["gate_rswitch"], msg, "kontaktron_brama")
         
     elif msg.topic==cfg.topics["door_rswitch"]:
         mongo.log_data(cfg.collections["door_rswitch"], msg, "kontaktron_drzwi")

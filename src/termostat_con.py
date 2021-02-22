@@ -34,19 +34,18 @@ def temp_get(coll_name, nb_rows=2, mongodb=mongo):
         Zwraca sumę elementów tablicy rekordów temperatury
     """
     myCol=mongodb.my_db[coll_name]
-    print(myCol.find().limit(5))
-        for x in myCol.find().sort("time",-1).limit(5):
-            
-            print(x)
-    
+    #print(myCol.find().limit(5))
+    for x in myCol.find().sort("time",-1).limit(5):
+        #print(x)
         rows=list(myCol.find().sort("time",-1).limit(nb_rows))
-        
+    return rows[0][list(rows[0].keys())[2]]   
     
     
-    if coll_name!="wind_dir":
+    """if coll_name!="wind_dir":
         
         temps=[]
         for row in rows:
+              
             try:
                 record=float(row.split(',')[1].strip('\n'))
                 if not math.isnan(record):
@@ -59,11 +58,12 @@ def temp_get(coll_name, nb_rows=2, mongodb=mongo):
     #   print(np.mean(temps))
      #obsługa wyjątków -> w pliku znajdują się same odczyty nan  
         if math.isnan(np.mean(temps)):
+            
             raise ValueError("wszystkie wartosci nan")
         else:
             return round(np.mean(temps),nb_rows)
-    else: 
-        return rows[0][list(rows[0].keys())[2]]
+    else:""" 
+        
     
 
 def grzal_con(flag_on, state, config=cfg):

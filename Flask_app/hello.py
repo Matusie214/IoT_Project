@@ -18,10 +18,10 @@ def index():
     hum -> zmienna przetrzymująca wilgotność dla pierwszego uruchomienia strony
     move -> zmienna przetrzymująca stan czujnika ruchu dla pierwszego uruchomienia strony
     """
-    temp = temp_get("../Data/Temperature.csv")
-    hum= temp_get("../Data/Wilgotnosc.csv")
-    move=temp_get("../Data/Entrance.csv")
-    co2=temp_get("../Data/Co2.csv")
+    temp = temp_get("temperatura_zew")
+    hum= temp_get("wilgotnosc_zew")
+    move="brak"#temp_get("kontaktron_brama")
+    co2=temp_get("co2_zew")
     """ if request.method == 'POST':
 
         if request.form['submit_button'] == 'Do Something':
@@ -53,16 +53,16 @@ def background_process():
     
     jsonify(nazwa zmiennej na stronie= wartość,....)
     """
-    if temp_get("../Data/Entrance.csv",nb_rows=1)==1:
-        return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"),
-                       movement="wykryto aktywność",co2=temp_get("../Data/Co2.csv",nb_rows=1))
-    elif temp_get("../Data/Entrance.csv",nb_rows=1)==0:
-        return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"),
-                       movement="brak aktywności",co2=temp_get("../Data/Co2.csv",nb_rows=1))
+    #if temp_get("kontaktron_brama",nb_rows=1)==1:
+    return jsonify(temperature=temp_get("temperatura_zew"),humidity= temp_get("wilgotnosc_zew"),
+                       movement="wykryto aktywność",co2=temp_get("co2_zew",nb_rows=1))
+    """elif temp_get("kontaktron_brama",nb_rows=1)==0:
+        return jsonify(temperature=temp_get("temperatura_zew"),humidity= temp_get("wilgotnosc_zew"),
+                       movement="brak aktywności",co2=temp_get("co2_zew",nb_rows=1))
     else:
-        return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"),
-                       movement=temp_get("../Data/Entrance.csv",nb_rows=1),Co2=temp_get("../Data/Co2.csv",nb_rows=1))
-   
+        return jsonify(temperature=temp_get("temperatura_zew"),humidity= temp_get("wilgotnosc_zew"),
+                       movement=temp_get("kontaktron_brama",nb_rows=1),Co2=temp_get("co2_zew",nb_rows=1))
+   """
     
     #return jsonify(temperature=temp_get("../Data/Temperature.csv"),humidity= temp_get("../Data/Wilgotnosc.csv"))
 

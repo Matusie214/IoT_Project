@@ -31,7 +31,7 @@ class Temp_Get_Test(unittest.TestCase):
 
     def test_zx(self):
         """ test z plikiem posiadającym mniej rekordów niż wymagana liczba podana w żądaniu """        
-        avg_temp = temp_get(coll_name="test_temp_coll_5.csv",nb_rows=2)
+        avg_temp = temp_get(coll_name="test_temp_coll_5",nb_rows=2)
         self.assertEqual(avg_temp,30.0)
 
 
