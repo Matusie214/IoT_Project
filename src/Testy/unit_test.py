@@ -3,37 +3,40 @@ sys.path.append('../../')
 from src.termostat_con import reg_temp, grzal_con, temp_get, MenageState
 import threading
 import time
+from src.MQTT_sub2 import Mongo_log
+import pymongo
 #from backend_heat import *
 #import backend_heat.StoppableThread
 import src.Configs.config_test_termostat_con as cfg
 import unittest
 import paho.mqtt.client as mqtt
-
-
+mongo=Mongo_log("mongodb://127.0.0.1:27017/", "test_database")
+print("list db:",mongo.my_client.list_database_names())
 state=MenageState()
 class Temp_Get_Test(unittest.TestCase):
     
    
     def test_x(self):
-        """ test z plikiem posiadającym same wartości typu String """        
-        self.assertRaises(ValueError, temp_get, "./../../Data/test_temp3.csv")
+        """test z plikiem posiadającym same wartości typu String """        
+        self.assertRaises(ValueError, temp_get, "test_temp_coll_3")
         
     def test_y(self):
         """ test sprawdzający poprawność działania funkcji odczytu metody """        
-        avg_temp = temp_get(coll_name="test_temp_coll_1",nb_rows=3)
-        self.assertEqual(avg_temp,28.5)
+        avg_temp = temp_get("test_temp_coll_1",nb_rows=3,mongodb=mongo)
+        print("list db:",mongo.my_client.list_database_names())
+        self.assertEqual(avg_temp,22.5)
         
     def test_z(self):
-        """ test z plikiem posiadającym wartości nan """        
-        avg_temp = temp_get(coll_name="test_temp_coll_4",nb_rows=10)
+        """test z plikiem posiadającym wartości nan"""         
+        avg_temp = temp_get("test_temp_coll_4",nb_rows=10,mongodb=mongo)
         self.assertEqual(avg_temp,30.0)
-        
 
+    
     def test_zx(self):
-        """ test z plikiem posiadającym mniej rekordów niż wymagana liczba podana w żądaniu """        
-        avg_temp = temp_get(coll_name="test_temp_coll_5",nb_rows=2)
+        """test z plikiem posiadającym mniej rekordów niż wymagana liczba podana w żądaniu"""         
+        avg_temp = temp_get("test_temp_coll_5",nb_rows=2,mongodb=mongo)
         self.assertEqual(avg_temp,30.0)
-
+    
 
 class Termostat_con_test(unittest.TestCase):
     
@@ -91,7 +94,7 @@ class Termostat_con_test(unittest.TestCase):
         #client.publish(cfg.topic_grzalka,cfg.dic["on"])
         time.sleep(4) # wait
         client.loop_stop() #stop the loop
-   
+    
     def test_grzal_con3(self):
         """ Test sprawdzający wystąpienie przypadów zabronionych """
         
@@ -165,7 +168,6 @@ class Termostat_con_test2(unittest.TestCase):
         reg_temp(22.0, state, config=cfg)
         time.sleep(4) # wait
         client.loop_stop() #stop the loop
-        
         
 if __name__ == '__main__':
     unittest.main()

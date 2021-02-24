@@ -35,10 +35,30 @@ def temp_get(coll_name, nb_rows=2, mongodb=mongo):
     """
     myCol=mongodb.my_db[coll_name]
     #print(myCol.find().limit(5))
-    for x in myCol.find().sort("time",-1).limit(5):
+    
         #print(x)
-        rows=list(myCol.find().sort("time",-1).limit(nb_rows))
-    return rows[0][list(rows[0].keys())[2]]   
+    rows=list(myCol.find().sort("time",-1).limit(nb_rows))
+    temps=[]
+    print(rows)
+    for row in rows:
+        try:
+            record=float(row[list(row.keys())[2]])
+            print(record)
+            if not math.isnan(record):
+                temps.append(record)
+        except ValueError:
+            pass      
+    if math.isnan(np.mean(temps)):
+        raise ValueError("wszystkie wartosci nan")
+    else:
+        return round(np.mean(temps),nb_rows) 
+
+
+    
+    
+    
+    
+    
     
     
     """if coll_name!="wind_dir":
@@ -62,7 +82,8 @@ def temp_get(coll_name, nb_rows=2, mongodb=mongo):
             raise ValueError("wszystkie wartosci nan")
         else:
             return round(np.mean(temps),nb_rows)
-    else:""" 
+    else:
+    record=float(rows[0][list(rows[0].keys())[2]])""" 
         
     
 

@@ -5,7 +5,7 @@ import unittest
 import pymongo
 from src.MQTT_sub2 import Mongo_log
 
-mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_data")
+mongo=Mongo_log("mongodb://127.0.0.1:27017/", "test_database")
 
 class collection_create(unittest.TestCase):
     
