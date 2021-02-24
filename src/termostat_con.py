@@ -35,11 +35,12 @@ def temp_get(coll_name, nb_rows=2, mongodb=mongo):
     """
     myCol=mongodb.my_db[coll_name]
     #print(myCol.find().limit(5))
-    
+    print("collection name", coll_name)
+    print("db name",mongodb.db_name)
         #print(x)
     rows=list(myCol.find().sort("time",-1).limit(nb_rows))
     temps=[]
-    print(rows)
+    print("rows",rows)
     for row in rows:
         try:
             record=float(row[list(row.keys())[2]])
@@ -134,8 +135,10 @@ def reg_temp(target_temp, state, config=cfg):
         target_temp:  temperatura którą chcemy osiągnąć poprzez odczyt z czujnika
         current_temp: temperatura aktualnie odczytywana z czujnika
     """
-    current_temp = temp_get(config.path_data_temperature, nb_rows=2)
-    
+    mongod=Mongo_log("mongodb://127.0.0.1:27017/", config.db_name)
+    print(" config.db_name", config.db_name)
+    current_temp = temp_get(config.collections["temperature_in"], nb_rows=2, mongodb=mongod)
+    print("current temp",current_temp)
     if target_temp > current_temp:
         #grzałka włącz
         grzal_con(True, state, config=config)

@@ -14,13 +14,17 @@ class Mongo_log():
         self.my_client=pymongo.MongoClient(self.mongo_adress)
         self.my_db=self.my_client[self.db_name]
         
-    def log_data(self, collection_name, msg, key):
-        print(msg.topic)
-        print(str(msg.payload.decode("utf-8")))
+    def log_data(self, collection_name, msg, key, is_payloade=True):
         time=datetime.datetime.now()
         now=time.strftime("%d/%m/%Y %H:%M:%S")
-        data = str(msg.payload.decode("utf-8"))
-        #data=str(msg)
+        if is_payloade:
+
+            print(msg.topic)
+            print(str(msg.payload.decode("utf-8")))
+            print(now)
+            data = str(msg.payload.decode("utf-8"))
+        else:
+            data=str(msg)
         hum_log={
                 "time": now,
                 key: float(data)

@@ -1,5 +1,6 @@
 broker_ip="34.123.208.229"
 broker_port=1883
+db_name="smart_home_data"
 path_data_temperature="./../Data/Temperature.csv"
 path_data_wiatr_sila="./../Data/WindS.csv"
 path_data_wiatr_kierunek="./../Data/WindD.csv"

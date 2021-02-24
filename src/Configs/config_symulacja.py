@@ -1,5 +1,6 @@
 broker_ip="34.123.208.229"
 broker_port=1883
+db_name="test_database"
 path_data="./../../Data/Mess.csv"
 path_data2="./../../Data/Mess2.csv"
 path_data_temperature="./../../Data/Mess.csv"
@@ -13,3 +14,7 @@ topic ={ "harmonogram_new":"harmonogram_new",
         "heating_switch":"heating_switch",
         "grzalka":"grzalka",
         "temperatura":"temperatura"}
+collections={
+ "temperature_in":"symulated_temp"
+    
+}

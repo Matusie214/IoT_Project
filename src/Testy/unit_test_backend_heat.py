@@ -4,28 +4,23 @@ from src.backend_heat import turn_off, set_temp, StoppableThread
 from src.termostat_con import temp_get
 import threading
 import time
-import src.Configs.config_test_termostat_con as cfg
+from src.MQTT_sub2 import Mongo_log
+import src.Configs.config_test_termostat_con 
 import unittest
 import paho.mqtt.client as mqtt
-import src.Configs.config_symulacja 
+import src.Configs.config_symulacja as cfg
 import math
-
-def generate_data(path , temp):
+mongo=Mongo_log("mongodb://127.0.0.1:27017/", "test_database")
+def generate_data(coll_name, temp, nb_rows=10, mongodb=mongo):
     """
     Metoda generująca wstępną temperaturę do testowania pracy grzałki
     """
+    #mongodb.my_client[coll_name].drop()
     
-    fileVariable = open(path, 'r+')
-    fileVariable.truncate(0)
-    fileVariable.close()
-    
-    for i in range(10):
-        plik=open(path,'a')
-        plik.write(","+str(temp))
-        plik.write("\n")
-        plik.close()
+    for i in range(nb_rows):
+        mongodb.log_data(coll_name, temp, "test_temp", is_payloade=False)
 
-def Symuluj(state, dt=0.1, num_steps=150, init_temp=28.0, config=cfg):
+def Symuluj(coll_name, state, dt=0.1, num_steps=150, init_temp=28.0, mongod=mongo):
     """
     Metoda generująca prosty symulator w celu przeprowadzenia testu na wątkach i termostacie
     
@@ -38,17 +33,14 @@ def Symuluj(state, dt=0.1, num_steps=150, init_temp=28.0, config=cfg):
     
     
     
-    current=temp_get(config.path_data_temperature)
+    current=temp_get(coll_name, nb_rows=2, mongodb=mongod)
     for i in range(num_steps):
         if state.state==True:
             current+=dt
         else:
             current+=-dt
         time.sleep(0.5)
-        plik=open(config.path_data_temperature,'a')
-        plik.write(","+str(current))
-        plik.write("\n")
-        plik.close()
+        mongod.log_data(coll_name, current, "test_temp", is_payloade=False)
         print("last state: ",state.state)
         print("temp: ", current)
         
@@ -92,14 +84,15 @@ class Set_Temp_Test(unittest.TestCase):
             self.assertEqual(thr.is_alive(),False)
     
     def test_set_temp(self):
-        generate_data(src.Configs.config_symulacja.path_data_temperature,24.0)
-        thr = StoppableThread(constant_temp=25.0,config=src.Configs.config_symulacja)
+        cfg_sym=src.Configs.config_symulacja
+        generate_data(cfg_sym.collections["temperature_in"], 24.0, mongodb=mongo)
+        thr = StoppableThread(constant_temp=25.0,config=cfg_sym)
         thr.start()
         
-        Symuluj(thr.state ,init_temp=24.5,config=src.Configs.config_symulacja)
+        Symuluj(cfg_sym.collections["temperature_in"], thr.state ,init_temp=24.5,mongod=mongo)
         
         thr.join()
-        score=temp_get(src.Configs.config_symulacja.path_data_temperature,1000)
+        score=temp_get(cfg_sym.collections["temperature_in"],150,mongodb=mongo)
         print(math.ceil(score))
         print(round(score))
         self.assertEqual(round(score),25.0)
