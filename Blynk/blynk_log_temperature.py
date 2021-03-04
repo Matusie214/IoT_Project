@@ -6,6 +6,7 @@ import paho.mqtt.client as mqtt
 import time
 import datetime
 import csv
+from datetime import datetime
 import BlynkLib
 from collections import deque
 import math 
@@ -36,10 +37,11 @@ def displayTemp():
         temp = temp_get("temperatura_zew")
         hum = temp_get("wilgotnosc_zew")
         move = temp_get("kontaktron_bramka")
-        print(temp)
+        #print(temp)
         blynk.virtual_write(0,'{:.2f}'.format(temp))
         blynk.virtual_write(1,'{:.2f}'.format(hum))
-
+        
+        #notifyier()
 @blynk.VIRTUAL_WRITE(2)
 def my_write_handler(value):
     """
@@ -70,6 +72,17 @@ def my_write_handler(value):
     global slider_temp
     slider_temp=float(value[0])
     print(value)
+    blynk.notify("wartość: ",value)
+@blynk.VIRTUAL_WRITE(22)
+def my_write_handler(value):
+    
+    
+        blynk.notify("something")
+def notifyier():
+    while(True):
+        time.sleep(20)
+        #blynk.notify("something")
+        print("time up")
 _thread.start_new_thread(displayTemp,() )
 while True:
     blynk.run()
