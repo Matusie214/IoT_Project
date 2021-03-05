@@ -46,7 +46,8 @@ topics={
     "RFID":"RFID",
     "wind_dir":"wind_dir",
     "wind_str":"wind_str",
-    "heating_switch":"heating_switch"
+    "heating_switch":"heating_switch",
+    "level":"level"
 }
 
 collections={
@@ -65,7 +66,8 @@ collections={
     "pir_garage":"pir_garaz",
     "RFID":"RFID",
     "wind_dir":"wiatr_kierunek",
-    "wind_str":"wiatr_sila"
+    "wind_str":"wiatr_sila",
+    "level":"poziom"
     
 }
 
