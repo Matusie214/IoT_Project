@@ -14,6 +14,7 @@ from collections import deque
 import math 
 from src.termostat_con import temp_get
 from src.backend_heat import turn_off, set_temp, StoppableThread
+from src.MQTT_pub import send_MSG
 global blynk
 global thr
 BLYNK_AUTH  = "iDP2biz4a0erZXDaMpuJaSLvbhc3mcon"
@@ -135,9 +136,18 @@ def displayTemp():
         
         
         
+@blynk.VIRTUAL_WRITE(56)
+def my_write_handler(value):
+    """
+    metoda obsługująca akcje z wirtualnego pinu 2
+    """
    
-        
-        
+    print(value)
+    
+    if value[0] == '1':
+        send_MSG("test_switch","1")
+    elif value[0] == '0':
+        send_MSG("test_switch","0")
         
         
         
