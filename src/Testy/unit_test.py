@@ -24,7 +24,7 @@ class Temp_Get_Test(unittest.TestCase):
         """ test sprawdzający poprawność działania funkcji odczytu metody """        
         avg_temp = temp_get("test_temp_coll_1",nb_rows=3,mongodb=mongo)
         print("list db:",mongo.my_client.list_database_names())
-        self.assertEqual(avg_temp,22.5)
+        self.assertEqual(avg_temp,28.5)
         
     def test_z(self):
         """test z plikiem posiadającym wartości nan"""         

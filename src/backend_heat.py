@@ -4,9 +4,32 @@ from src.termostat_con import reg_temp, grzal_con, MenageState
 import threading
 import time
 import src.Configs.config as cfg
+import src.schedule
+from MQTT_sub2 import Mongo_log
+import pymongo
+mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_schedule_test")
+
+class MenageThread():
+    """
+    Klasa informująca o stanie w jakim jest grzałka
+    """
+    def __init__(self, temp) :
+        self.thr=None
+        
+    def new_thread(self,new_temp):
+        if self.thr!=None :
+            self.thr.join()
+        self.thr=StoppableThread(constant_temp=new_temp)
+        self.thr.start()
+        
+    def turn_off(self):
+    """
+    Metoda kończąca życie wątku
+    """
+        if self.thr!=None :
+            self.thr.join()
 
 
-global thr
 class StoppableThread(threading.Thread):
     """
         Definicja pracy, inicjacji oraz zatrzymania wątków
@@ -43,35 +66,24 @@ class StoppableThread(threading.Thread):
 #thr2=StoppableThread(constant_temp=25.0)
 #thr2.start()
 
-flag_first=False
 
-def set_temp(targ_temp):
+
+def set_temp(targ_temp,thr_menager):
     """
     Metoda odpowiedzialna za tworzenie wątku dążącego do zalożonej temperatury
-
     Args:
         flag_first: określa stan początkowy wątku (powołana aby umożliwić zmianę temperatury przez użytkownika)
     """
-    
-    global thr
-    if(flag_first==False):
-        thr = StoppableThread(constant_temp=targ_temp)
-        thr.start()
-        flag_first=True
-    else:
-        thr.join()
-        thr = StoppableThread(constant_temp=targ_temp)
-        thr.start()
-        flag_first=False
+        thr_menager.new_thread(targ_temp)
 
-def turn_off(thr_off):
-    """
-    Metoda kończąca życie wątku
-    """
-    
-    global thr
-    if thr_off:
-        thr.join()
+
 
         
+class Schedule_menager():
+    
+    def schedule_start():
+        target_temp=schedule_temp(mongo, collection)
+        set_temp(targ_temp)
+    
+    def schedule_end():
         
