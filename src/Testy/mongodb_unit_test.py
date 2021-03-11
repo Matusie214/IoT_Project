@@ -10,15 +10,18 @@ mongo=Mongo_log("mongodb://127.0.0.1:27017/", "test_database")
 class collection_create(unittest.TestCase):
     
     def test_x(self):
-        myCol=mongo.my_db["wilgotnosc_zew"]
-        #myCol=mongo.my_db["test_collection"]
+        """
+        Test sprawdzający poprawność tworzenia kolekcji wraz zapisem
+        """
+        #myCol=mongo.my_db["wilgotnosc_zew"]
+        myCol=mongo.my_db["test_collection"]
         #myCol.drop()
         print(mongo.my_client.list_database_names())
         test_log={
         "time":"10/02/2021 13:52:11",
         "record": "25.50"
         }
-        #myCol.insert_one(test_log)
+        myCol.insert_one(test_log)
         dblist=mongo.my_client.list_database_names()
         if "test_database" in dblist:
             print("The database exists.")
@@ -28,8 +31,8 @@ class collection_create(unittest.TestCase):
         print(myCol.find().limit(5))
         for x in myCol.find().sort("time",-1).limit(5):
             print(x)
-        #print(list(myCol.find({},{ "record": 25.5 }))[0]["record"])
-        #self.assertEqual(list(myCol.find({},{ "record": 25.5 }))[0]["record"],"25.50")
+        print(list(myCol.find({},{ "record": 25.5 }))[0]["record"])
+        self.assertEqual(list(myCol.find({},{ "record": 25.5 }))[0]["record"],"25.50")
         
         
     def log_data_test(self):

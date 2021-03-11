@@ -12,6 +12,9 @@ mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_data")
 topic_grzalka = cfg.topic["temperatura"]
 
 class MenageState():
+    """
+    Klasa informująca o stanie w jakim jest grzałka
+    """
     def __init__(self) :
         self.state=True
     
