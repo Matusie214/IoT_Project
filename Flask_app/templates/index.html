@@ -43,27 +43,41 @@
         <div class="container1_right">
             <div>
                 <div id="container1_box1" class="active_container">
-                    Temperatura wynosi: 
+                    Temperatura na zewnątrz wynosi: 
                     <p id=result>
                         {{temp}}
                     </p>°C
                 
+                <div id="my_dataviz"></div>
+                    
+                    Temperatura wewnątrz wynosi: 
+                    <p id=result>
+                        {{temp2}}
+                    </p>°C
                 <div id="my_dataviz"></div>
                 <!--<canvas id="myChart" width="400" height="400"></canvas>-->
                 
  
                 </div>
                 <div id="container1_box2">
-                    Aktualna wilgotność wynosi:
+                    Aktualna wilgotność na zewnątrz wynosi:
                     <p id=result2>
                         {{hum}}
+                    </p>
+                    Aktualna wilgotność wewnątrz wynosi:
+                    <p id=result2>
+                        {{hum2}}
                     </p>
                 </div>
                 
                 <div id="container1_box3">
-                    Aktualny poziom Co2 :
+                    Aktualny poziom Co2 na zewnątrz :
                     <p id=result4>
                         {{co2}}
+                    </p>
+                    Aktualny poziom Co2 wewnątrz :
+                    <p id=result4>
+                        {{co22}}
                     </p>
                 </div>
                 
@@ -73,9 +87,17 @@
                 </div>
                 
                 <div id="container1_box5">
-                    Stan czujnika schodów: 
+                    Stan czujnika Pir salon: 
                     <p id=result3>
                         {{move}}
+                    </p>
+                    Stan czujnika Pir wejście: 
+                    <p id=result3>
+                        {{move2}}
+                    </p>
+                    Stan czujnika Pir garaż: 
+                    <p id=result3>
+                        {{move3}}
                     </p>
                 </div>
                 
