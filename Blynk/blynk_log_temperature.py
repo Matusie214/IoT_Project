@@ -13,7 +13,7 @@ import random
 from collections import deque
 import math 
 from src.termostat_con import temp_get
-from src.backend_heat import turn_off, set_temp, StoppableThread
+from src.backend_heat import  set_temp, StoppableThread ,MenageThread
 from src.MQTT_pub import send_MSG
 global blynk
 global thr

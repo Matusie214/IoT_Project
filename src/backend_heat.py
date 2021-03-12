@@ -5,7 +5,7 @@ import threading
 import time
 import src.Configs.config as cfg
 import src.schedule
-from MQTT_sub2 import Mongo_log
+from src.MQTT_sub2 import Mongo_log
 import pymongo
 mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_schedule_test")
 
@@ -23,9 +23,9 @@ class MenageThread():
         self.thr.start()
         
     def turn_off(self):
-    """
-    Metoda kończąca życie wątku
-    """
+        """
+        Metoda kończąca życie wątku
+        """
         if self.thr!=None :
             self.thr.join()
 
@@ -74,7 +74,7 @@ def set_temp(targ_temp,thr_menager):
     Args:
         flag_first: określa stan początkowy wątku (powołana aby umożliwić zmianę temperatury przez użytkownika)
     """
-        thr_menager.new_thread(targ_temp)
+    thr_menager.new_thread(targ_temp)
 
 
 
@@ -85,5 +85,5 @@ class Schedule_menager():
         target_temp=schedule_temp(mongo, collection)
         set_temp(targ_temp)
     
-    def schedule_end():
+    #def schedule_end():
         

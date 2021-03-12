@@ -12,9 +12,12 @@ metoda powrotu do ustawień fabrycznych/czyszczenia harmonogramu DONE
 metoda dodająca nowy przedział DONE
 
 """
-from MQTT_sub2 import Mongo_log
+import sys
+sys.path.append('../../')
+
 import pymongo
 from datetime import datetime
+from src.MQTT_sub2 import Mongo_log
 mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_schedule_test")
 
 #                                     v Config,
