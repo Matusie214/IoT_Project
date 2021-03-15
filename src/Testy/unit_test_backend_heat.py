@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../../')
-from src.backend_heat import turn_off, set_temp, StoppableThread
+from src.backend_heat import  StoppableThread
 from src.termostat_con import temp_get
 import threading
 import time
@@ -8,9 +8,11 @@ from src.MQTT_sub2 import Mongo_log
 import src.Configs.config_test_termostat_con 
 import unittest
 import paho.mqtt.client as mqtt
+from datetime import datetime
 import src.Configs.config_symulacja as cfg
 import math
 mongo=Mongo_log("mongodb://127.0.0.1:27017/", "test_database")
+mongo2=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_schedule_test")
 def generate_data(coll_name, temp, nb_rows=10, mongodb=mongo):
     """
     Metoda generująca wstępną temperaturę do testowania pracy grzałki
@@ -48,7 +50,7 @@ def Symuluj(coll_name, state, dt=0.1, num_steps=150, init_temp=28.0, mongod=mong
 
     
 class Set_Temp_Test(unittest.TestCase):
-    
+    '''   
     
     
     def test_watku(self):
@@ -57,7 +59,7 @@ class Set_Temp_Test(unittest.TestCase):
 
         Wyłączanie grzałki w celu obniżenia temperatury do pożądanej
         """
-        thr = StoppableThread(constant_temp=25.0,config=cfg)
+        thr = StoppableThread(mongo2,"schedule_test",config=cfg)
         
         thr.start()
         with self.subTest():
@@ -72,7 +74,7 @@ class Set_Temp_Test(unittest.TestCase):
         """
         Włączanie grzałki w celu podniesienia temperatury
         """
-        thr = StoppableThread(constant_temp=35.0,config=cfg)    
+        thr = StoppableThread(mongo2,"schedule_test",config=cfg)    
         thr.start()
         with self.subTest():
             self.assertEqual(thr.is_alive(),True)
@@ -82,11 +84,11 @@ class Set_Temp_Test(unittest.TestCase):
         thr.join()
         with self.subTest():
             self.assertEqual(thr.is_alive(),False)
-    
+    '''
     def test_set_temp(self):
         cfg_sym=src.Configs.config_symulacja
         generate_data(cfg_sym.collections["temperature_in"], 24.0, mongodb=mongo)
-        thr = StoppableThread(constant_temp=25.0,config=cfg_sym)
+        thr = StoppableThread(mongo2,"schedule_test",config=cfg_sym)
         thr.start()
         
         Symuluj(cfg_sym.collections["temperature_in"], thr.state ,init_temp=24.5,mongod=mongo)

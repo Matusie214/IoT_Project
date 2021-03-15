@@ -17,7 +17,7 @@ sys.path.append('../../')
 
 import pymongo
 from datetime import datetime
-from src.MQTT_sub2 import Mongo_log
+from MQTT_sub2 import Mongo_log
 mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_schedule_test")
 
 #                                     v Config,
@@ -67,7 +67,7 @@ def initHarmonogram(mongo, collection,  temp=21, days=["Saturday","Sunday","Mond
         "periods":[]
         }
         x=myCol.insert_one(schedule)
-#initHarmonogram(mongo,"schedule_test")
+#initHarmonogram(mongo,"schedule_test",days=["Friday"])
 
 def addHarmonogram(mongo, collection, temp, day, start, end):
     """
@@ -93,9 +93,9 @@ def addHarmonogram(mongo, collection, temp, day, start, end):
     newvalues = { "$set": { "periods":periods}}
     
     myCol.update_one(myquery, newvalues)
+#addHarmonogram(mongo,"schedule_test",23.0,"Friday","17:00","19:00")
 
-
-def getPeriods(mongo,collection,day,defalut_temp=False):
+def getPeriods(mongo,collection,day):
     """
     Metoda pobierająca przedziały czasowe harmonogramów w danym dniu
         
@@ -103,20 +103,26 @@ def getPeriods(mongo,collection,day,defalut_temp=False):
             mongo      - połaczenie z bazą danych
             collection - kolekcja (powinna być schedule)
             day        - dzień w którym obowiązuje harmonogram
+            defalut_temp - flaga do otrzymania defalut temp
     
     """
     myCol=mongo.my_db[collection]
     myquery = { "$and":[{"day":{"$eq":day}},{"periods":{'$exists': 1}}] }
     schedule=list(myCol.find(myquery))
-    periods=schedule[0]["periods"]
-    print(list(periods))
-    if defalut_temp:
-        temp=schedule[0]["defalut_temp"]
-        return list(periods),temp
+    print(schedule)
+    if schedule==[]:
+        raise IndexError("Warning: There is no schedules on day:"+str(day)+"!")
     else:
-        return list(periods)
+        if len(schedule[0]["periods"])==0:
+            print("Warning: Empty list of periods!")
+            periods=schedule[0]["periods"]
+            return periods
+        else:    
+            periods=schedule[0]["periods"]
+        
+            return list(periods)
 #addHarmonogram(mongo, "schedule_test", 22.0, "Saturday", "10:30", "10:35")
- 
+#getPeriods(mongo, "schedule_test", "Friday",defalut_temp=True)
 def changeDefalut(mongo, collection, day, temp):
     """
     Metoda zmieniająca temperaturę domyślną w danym dniu
@@ -206,37 +212,50 @@ def restoreDefalut(mongo, collection="schedule_test", days=["Monday", "Tuesday",
     initHarmonogram(mongo,collection,days)
 
 def schedule_temp(mongo, collection, day=None, hour=None, minute=None):
-    if day==None and hour==None and minute==None:
-        now = datetime.now() # current date and time
-
-        Day = now.strftime("%d")
-        minute_current = now.strftime("%M")
+    now = datetime.now() # current date and time
+    if day==None:
+        Day = now.strftime("%A")
+        day=Day
+    print(day)
+    if hour==None:    
+        
         hour_current=now.strftime("%H")
-        minute=minute_current
         hour=hour_current
-        day=day_current
+        
+    if minute==None:    
+        minute_current = now.strftime("%M")
+        minute=minute_current
     
-    string_now=hour+":"+minute
+    string_now=str(hour)+":"+str(minute)
     
-    element = datetime.datetime.strptime(string_now,"%H:%M")
-    timestamp = datetime.datetime.timestamp(element)  
+    element = datetime.strptime(string_now,"%H:%M")
+    timestamp = datetime.timestamp(element)  
     myCol=mongo.my_db[collection]
     myquery = { "$and":[{"day":{"$eq":day}},{"periods":{'$exists': 1}}] }
-    periods, final_temp=getPeriods(mongo,collection,day,defalut_temp=True)
+    temp=list(myCol.find(myquery))
+    print(temp)
+    final_temp=temp[0]["defalut_temp"]
     
-    for period in periods:
-        
-        string_start=period["start"]
-        element2 = datetime.datetime.strptime(string_start,"%H:%M")
-        timestamp_start = datetime.datetime.timestamp(element2)
-        
-        string_end=period["end"]
-        element3 = datetime.datetime.strptime(string_end,"%H:%M")
-        timestamp_end = datetime.datetime.timestamp(element3)
-        
-        if timestamp_start<timestamp and timestamp_end>timestamp:
-            final_temp=period["temp"]
-            return final_temp
+    print("before getPeriods")
+    periods=getPeriods(mongo,collection,day)
+    print("periods",periods)
+    print("final_temp",final_temp)
+    if periods==[]:
+        return final_temp
+    else:
+        for period in periods:
+
+            string_start=period["start"]
+            element2 = datetime.strptime(string_start,"%H:%M")
+            timestamp_start = datetime.timestamp(element2)
+
+            string_end=period["end"]
+            element3 = datetime.strptime(string_end,"%H:%M")
+            timestamp_end = datetime.timestamp(element3)
+
+            if timestamp_start<timestamp and timestamp_end>timestamp:
+                final_temp=period["temp"]
+                return final_temp
     return final_temp
-        
+#schedule_temp(mongo,"schedule_test",day="Friday")        
     

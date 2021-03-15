@@ -91,7 +91,14 @@ class Mongo_log():
         #for element in result:
             #print(element)
 
-
+    def show_data(self, collection_name, nb_rows=None):
+        myCol=self.my_db[collection_name]
+        if nb_rows!=None:
+            rows=list(myCol.find().sort("_id",-1).limit(nb_rows))
+        else :
+            rows=list(myCol.find().sort("_id",-1))
+        for row in rows:
+            print(row)
     
 
 """Nawiązanie połączenia z bazą """
