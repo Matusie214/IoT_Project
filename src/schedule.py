@@ -17,7 +17,7 @@ sys.path.append('../../')
 
 import pymongo
 from datetime import datetime
-from MQTT_sub2 import Mongo_log
+from src.MQTT_sub2 import Mongo_log
 mongo=Mongo_log("mongodb://127.0.0.1:27017/", "smart_home_schedule_test")
 
 #                                     v Config,
