@@ -16,6 +16,7 @@ from src.termostat_con import temp_get
 from src.backend_heat import  set_temp, StoppableThread ,MenageThread
 from src.MQTT_pub import send_MSG
 global blynk
+import requests
 global thr
 BLYNK_AUTH  = "iDP2biz4a0erZXDaMpuJaSLvbhc3mcon"
 BLYNK_AUTH2 = "QOAJk6CMlkI6v6MmU6Juu2cq8g72l62-"
@@ -34,6 +35,8 @@ blynk2 =BlynkLib.Blynk(BLYNK_AUTH2,
                        #log=print                       # use print function for debug logging
                        )
 print("end")
+
+
 global slider_temp
 def displayTemp():
     """
@@ -64,78 +67,93 @@ def displayTemp():
         V12 |     MAGNETOMETR
         V13 |     TRANSOPTOR
         V14 |     ULTRADŹWIĘKOWY
-        V15 |     ELEKTROZACZEP DRZWI
-        V16 |     ELEKTROZACZEP FURTKA
-        V17 |     FOTODIODA
-        V18 |     LAMPA
-        V19 |     RFID
+        V15 |     FOTODIODA
+        V16 |     RFID
+        V17 |     
+        V18 |     
+        V19 |     
         V20 |     BRAMA
         V21 |     ALARM
         V22 |     GRZAŁKA
         V23 |     WENTYLATOR
         
         """
+
     
     
-    
-    
-        temp = temp_get("temperatura_wew")
-        temp2 = temp_get("temperatura_zew")
         
-        hum = temp_get("wilgotnosc_wew")
-        hum2 = temp_get("wilgotnosc_zew")
+        #temp = temp_get("temperatura_wew")
+        edge_detect(0,"temperatura_wew")
+        edge_detect(1,"wilgotnosc_wew")
+        edge_detect(2,"temperatura_zew")
+        edge_detect(3,"wilgotnosc_zew")
+        edge_detect(4,"co2_wew")
+        edge_detect(5,"co2_zew")
+
+
+        pir_drzwi= temp_get("pir_drzwi",nb_rows=1)
+        if pir_drzwi==1:
+            icon_change(6, 1, BLYNK_AUTH)
+        elif pir_drzwi==0:
+            icon_change(6, 2, BLYNK_AUTH)
+            
+        pir_salon= temp_get("pir_salon",nb_rows=1)
+        if pir_salon==1:
+            icon_change(7, 1, BLYNK_AUTH)
+        elif pir_salon==0:
+            icon_change(7, 2, BLYNK_AUTH)
         
-        co2 = temp_get("co2_zew")
-        co22 = temp_get("co2_wew")
+        pir_garaz= temp_get("pir_garaz",nb_rows=1)
+        if pir_garaz==1:
+            icon_change(8, 1, BLYNK_AUTH)
+        elif pir_garaz==0:
+            icon_change(8, 2, BLYNK_AUTH)
         
-        kontr_bramka = temp_get("kontaktron_bramka")
+        kontaktron_brama= temp_get("kontaktron_brama",nb_rows=1)
+        if kontaktron_brama==1:
+            icon_change(9, 1, BLYNK_AUTH)
+        elif kontaktron_brama==0:
+            icon_change(9, 2, BLYNK_AUTH)
+        elif kontaktron_brama!=1 and kontaktron_brama!=0:
+            icon_change(9, 3, BLYNK_AUTH)
+        
+        kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
+        if kontr_bramka==1:
+            icon_change(10, 1, BLYNK_AUTH)
+        elif kontr_bramka==0:
+            icon_change(10, 2, BLYNK_AUTH)
+            
+        kontr_drzwi = temp_get("kontaktron_drzwi",nb_rows=1)
+        if kontr_drzwi==1:
+            icon_change(11, 1, BLYNK_AUTH)
+        elif kontr_drzwi==0:
+            icon_change(11, 2, BLYNK_AUTH)
+            
+        edge_detect(13,"wiatr_sila")
+        edge_detect(14,"poziom")
+        edge_detect(15,"swiatlo_zew")
+        #edge_detect(16,"RFID")
+        blynk.virtual_write(19,"ostatni tag:")
+        blynk.virtual_write(18,temp_get("RFID",nb_rows=1))
         
         """
+  
+        #wiatr_kier = temp_get("wiatr_kierunek")
         
-        kontr_brama = temp_get("kontaktron_brama")
-        kontr_drzwi = temp_get("kontaktron_drzwi")
+       
         
-        pir_drzwi  = temp_get("pir_drzwi")
-        pir2_salon = temp_get("pir_salon")
-        pir3_garaz = temp_get("pir_garaz")
-        
-        #RFID = temp_get("RFID")
-        
-        wiatr_predkosc = temp_get("wiatr_kierunek")
-        #wiatr_kier = temp_get("wiatr_sila")
-        
-        fotodioda = temp_get("swiatlo_zew")
-        
-        ultradzwiekowy = temp_get("poziom")
         """
         #print(temp)
-        blynk.virtual_write(0,'{:.2f}'.format(temp))
-        blynk.virtual_write(1,'{:.2f}'.format(hum))
-        blynk.virtual_write(2,'{:.2f}'.format(temp2))
-        blynk.virtual_write(3,'{:.2f}'.format(hum2))
-        blynk.virtual_write(4,'{:.2f}'.format(co22))
-        blynk.virtual_write(5,'{:.2f}'.format(co2))
-        blynk.virtual_write(10,'{:.2f}'.format(kontr_bramka))
-        """blynk.virtual_write(6,'{:.2f}'.format(pir_drzwi))
-        blynk.virtual_write(7,'{:.2f}'.format(pir2_salon))
-        blynk.virtual_write(8,'{:.2f}'.format(pir3_garaz))
-        blynk.virtual_write(9,'{:.2f}'.format(kontr_brama))
+        #blynk.virtual_write(0,'{:.2f}'.format(temp))
         
-        blynk.virtual_write(11,'{:.2f}'.format(kontr_drzwi))
-        #blynk.virtual_write(12,'{:.2f}'.format(wiatr_kier))
-        blynk.virtual_write(13,'{:.2f}'.format(wiatr_predkosc))
-        blynk.virtual_write(14,'{:.2f}'.format(ultradzwiekowy))
-        blynk.virtual_write(17,'{:.2f}'.format(fotodioda))
-        #blynk.virtual_write(19,'{:.2f}'.format(RFID))
-        """
-        blynk2.virtual_write(0,'{:.2f}'.format(temp))
-        blynk2.virtual_write(1,'{:.2f}'.format(hum))
+        
+        
+ 
+        #blynk2.virtual_write(0,'{:.2f}'.format(temp))
+        #blynk2.virtual_write(1,'{:.2f}'.format(hum))
         
         #notifyier()
-        
-        
-        
-        
+          
 @blynk.VIRTUAL_WRITE(56)
 def my_write_handler(value):
     """
@@ -154,72 +172,37 @@ def my_write_handler(value):
         
 @blynk.VIRTUAL_WRITE(30)        
 def my_write_handler(value):
-    wartosc=value[0]
-    otwarte=0
-    while(wartosc!=0):
-        kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
-        if wartosc == '1' and (kontr_bramka==1.0 and otwarte==0) :
-            print("nacisnieto")
-            
-            
-            blynk.virtual_write(27,2) # Show image 1 - Widget on V3
-            while kontr_bramka!=0.0:
-                kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
-                time.sleep(0.5)
-        elif kontr_bramka==0.0 :
-            print("otwarto")
-            
-            otwarte=1
-            blynk.virtual_write(27,1) # Show image 2 - Widget on V3
-            while kontr_bramka!=1.0:
-                kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
-                time.sleep(0.5)
-        elif otwarte==1 and kontr_bramka==1.0 :
-            print("zamknieto")
-            blynk.virtual_write(27,2)
-            time.sleep(0.5)
-            wartosc=0
-        else:
-            otwarte=1
-            time.sleep(0.5)
-            
+    if value[0] == '1':
+        send_MSG("gateway_switch","1")
+    elif value[0] == '0':
+        send_MSG("gateway_switch","0")
+
+@blynk.VIRTUAL_WRITE(31)        
+def my_write_handler(value):
+    if value[0] == '1':
+        send_MSG("gate_switch","1")
+    elif value[0] == '2':
+        send_MSG("gate_switch","0")
+    elif value[0] == '3':
+        send_MSG("gate_switch","2")
+        
 @blynk.VIRTUAL_WRITE(32)        
 def my_write_handler(value):
-    wartosc=value[0]
-    otwarte=0
-    while(wartosc!=0):
-        kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
-        if wartosc == '1' and (kontr_bramka==1.0 and otwarte==0) :
-            print("nacisnieto")
-            
-            
-            blynk.virtual_write(29,2) # Show image 1 - Widget on V3
-            while kontr_bramka!=0.0:
-                kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
-                time.sleep(0.5)
-        elif kontr_bramka==0.0 :
-            print("otwarto")
-            
-            otwarte=1
-            blynk.virtual_write(29,1) # Show image 2 - Widget on V3
-            while kontr_bramka!=1.0:
-                kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
-                time.sleep(0.5)
-        elif otwarte==1 and kontr_bramka==1.0 :
-            print("zamknieto")
-            blynk.virtual_write(29,2)
-            time.sleep(0.5)
-            wartosc=0
-        else:
-            otwarte=1
-            time.sleep(0.5)
-
+    if value[0] == '1':
+        send_MSG("door_switch","1")
+    elif value[0] == '0':
+        send_MSG("door_switch","0")
+@blynk.VIRTUAL_WRITE(27)        
+def my_write_handler(value):
+    if value[0] == '1':
+        send_MSG("gate_switch","1")
+    elif value[0] == '2':
+        send_MSG("gate_switch","0")
+    elif value[0] == '3':
+        send_MSG("gate_switch","2")
     
-@blynk.VIRTUAL_READ(10)
-def my_read_handler():
-    kontr_bramka = temp_get("kontaktron_bramka",nb_rows=1)
-    # this widget will show some time in seconds..
-    blynk.virtual_write(10, kontr_bramka)
+    
+
 
 
 @blynk.VIRTUAL_WRITE(24)
@@ -268,6 +251,50 @@ def notifyier():
         time.sleep(20)
         #blynk.notify("something")
         print("time up")
+        
+def icon_change(pin, value, token):
+    new=value
+    print("icon")
+    print("new",new)
+    request_old="http://34.123.208.229:8080/"+str(token)+"/get/V"+str(pin)
+    old=requests.get(request_old)
+    
+    oldF=float(old.json()[0])
+    print("old",oldF)
+    print(new!=oldF)
+    if new!=oldF:
+        #print("old",old)
+        #print("new",new)
+        request="http://34.123.208.229:8080/"+str(token)+"/update/V"+str(pin)+"?value="+str(new)
+        val=requests.get(request)
+        print("wysłano",request)
+
+    
+def edge_detect(pin,collection):
+    new= temp_get(collection)
+
+    token="iDP2biz4a0erZXDaMpuJaSLvbhc3mcon"
+    #http://34.123.208.229:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/get/V
+    request="http://34.123.208.229:8080/"+str(token)+"/get/V"+str(pin)
+    old=requests.get(request)
+    oldF=float(old.json()[0])
+    #print(round(np.mean(oldF),1))
+    #print(new!=oldF)
+    if new!=oldF:
+        blynk.virtual_write(pin,'{:.2f}'.format(new))
+        #print("old",old)
+        #print("new",new)
+        
 _thread.start_new_thread(displayTemp,() )
+
+
+
+
+
+
+
+
+
+
 while True:
     blynk.run()
