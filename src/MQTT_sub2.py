@@ -74,7 +74,7 @@ class Mongo_log():
         now=time.strftime("%d/%m/%Y %H:%M:%S")
         if is_payloade:
             #print(msg.topic)
-            print(str(msg.payload.decode("utf-8")))
+            #print(str(msg.payload.decode("utf-8")))
             #print(now)
             data = msg.payload.decode("utf-8")
         else:
@@ -86,10 +86,10 @@ class Mongo_log():
         #print(hum_log)
         myCol=self.my_db[collection_name]
         x=myCol.insert_one(hum_log)
-        #print(myCol.find())
-        #result=myCol.find()
-        #for element in result:
-            #print(element)
+        print(myCol.find())
+        result=myCol.find()
+        for element in result:
+            print(element)
 
     def show_data(self, collection_name, nb_rows=None):
         myCol=self.my_db[collection_name]
@@ -161,6 +161,8 @@ def on_message(client, userdata, msg):
         
     elif msg.topic==cfg.topics["wind_str"]:
         mongo.log_data(cfg.collections["wind_str"], msg, "sila_wiatru")
+        #data = str(msg.payload.decode("utf-8"))
+        #print(data)
     
     elif msg.topic==cfg.topics["humidity_out"]:
         mongo.log_data(cfg.collections["humidity_out"], msg, "wilgotnosc_zew")
@@ -202,7 +204,10 @@ def on_message(client, userdata, msg):
     
     elif msg.topic==cfg.topics["light_out"]:
         mongo.log_data(cfg.collections["light_out"], msg, "swiatlo_zew")
-        print(data+" "+now)
+    
+    elif msg.topic==cfg.topics["level"]:
+        mongo.log_data(cfg.collections["level"], msg, "poziom")
+        
 
 
 def save_climate_data():
