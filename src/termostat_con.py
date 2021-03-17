@@ -41,22 +41,28 @@ def temp_get(coll_name, nb_rows=2, mongodb=mongo):
     
     rows=list(myCol.find().sort("_id",-1).limit(nb_rows))
     temps=[]
-    
-    for row in rows:
-        try:
-            record=float(row[list(row.keys())[2]])
+    if coll_name=="RFID":
+        for row in rows:
+            record=row[list(row.keys())[2]]
             print(record)
-            if not math.isnan(record):
-                temps.append(record)
-        except ValueError:
-            pass      
-    """
-    obsługa wyjątków
-    """
-    if math.isnan(np.mean(temps)):
-        raise ValueError("wszystkie wartosci nan")
+        return record
+            
     else:
-        return round(np.mean(temps),nb_rows) 
+        for row in rows:
+            try:
+                record=float(row[list(row.keys())[2]])
+                #print(row.keys(),record)
+                if not math.isnan(record):
+                    temps.append(record)
+            except ValueError:
+                pass      
+        """
+        obsługa wyjątków
+        """
+        if math.isnan(np.mean(temps)):
+            raise ValueError("wszystkie wartosci nan")
+        else:
+            return round(np.mean(temps),nb_rows) 
 
         
     
