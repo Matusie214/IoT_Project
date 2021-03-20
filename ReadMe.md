@@ -19,3 +19,8 @@ sudo systemctl enable mongod
 sudo systemctl status mongodb
 
 
+sprawdzenie kontenerów
+sudo docker ps
+
+uruchomienie dockera z konkretnego kontenera
+sudo docker start 2f16b84c6b3e
