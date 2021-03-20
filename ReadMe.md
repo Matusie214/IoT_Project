@@ -3,6 +3,24 @@ sudo docker run -it -v <ścieżka do repo>:/IoT_Project python:3.6 bash
 
 
 
+uruchomienie nowej instancji
+git clone <link do repo>
+python -m pip install pymongo
+sudo apt-get -y install python3-pip
+pip install Flask
+
+mosquitto:
+
+http://www.steves-internet-guide.com/install-mosquitto-linux/
+
+MQTT:
+
+pip3 install paho-mqtt
+sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+sudo apt-get update
+sudo apt-get install mosquitto
+sudo apt-get install mosquitto-clients
+sudo apt clean
 
 mongo:
 
@@ -24,3 +42,5 @@ sudo docker ps
 
 uruchomienie dockera z konkretnego kontenera
 sudo docker start 2f16b84c6b3e
+
+
