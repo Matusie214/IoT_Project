@@ -14,4 +14,8 @@ echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" 
 sudo apt update
 sudo apt-get install -y mongodb-org
 
+sudo systemctl start mongod
+sudo systemctl enable mongod
+sudo systemctl status mongodb
+
 
