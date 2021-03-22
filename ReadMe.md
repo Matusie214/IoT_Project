@@ -5,9 +5,9 @@ sudo docker run -it -v <ścieżka do repo>:/IoT_Project python:3.6 bash
 
 uruchomienie nowej instancji
 git clone <link do repo>
-python -m pip install pymongo
+python3 -m pip install pymongo
 sudo apt-get -y install python3-pip
-pip install Flask
+pip3 install Flask
 
 mosquitto:
 
