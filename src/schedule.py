@@ -209,8 +209,8 @@ def restoreDefalut(mongo, collection="schedule_test", days=["Monday", "Tuesday",
     """
     myCol=mongo.my_db[collection]
     dropSchedule(mongo, collection)
-    initHarmonogram(mongo,collection,days)
-
+    initHarmonogram(mongo,collection=collection,days=days,temp=21)
+restoreDefalut(mongo)
 def schedule_temp(mongo, collection, day=None, hour=None, minute=None):
     now = datetime.now() # current date and time
     if day==None:

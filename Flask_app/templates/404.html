@@ -1,0 +1,15 @@
+<form action="/dash2/" method="post" style="margin: 3em 0;">
+                        Podaj temperaturę którą ma śledzić termostat:
+                        <input type="text" class="form-control" placeholder="temperatura" name="temp" value="{{request.form.temp}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="day" value="{{request.form.day}}">
+                        <input class="button_sub" type="submit" value="wyślij">
+                    </form>
+
+<form action="/dash3/" method="post" style="margin: 3em 0;">
+                        Podaj temperaturę którą ma śledzić termostat:
+                        <input type="text" class="form-control" placeholder="temperatura" name="temp" value="{{request.form.temp}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="day" value="{{request.form.day}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="start" value="{{request.form.start}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="end" value="{{request.form.end}}">
+                        <input class="button_sub" type="submit" value="wyślij">
+                    </form>

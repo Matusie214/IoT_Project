@@ -41,7 +41,7 @@ def temp_get(coll_name, nb_rows=2, mongodb=mongo):
     
     rows=list(myCol.find().sort("_id",-1).limit(nb_rows))
     temps=[]
-    if coll_name=="RFID":
+    if coll_name=="RFID" or "wiatr_kierunek":
         for row in rows:
             record=row[list(row.keys())[2]]
             print(record)

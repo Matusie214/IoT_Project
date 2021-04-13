@@ -21,7 +21,7 @@
     <div id="menu">
         <ul>
             <li id="menu_item1"><img src="/static/img/menu_icon1.png" alt=""><span>Odczyty</span></li>
-            <li id="menu_item2"><img src="/static/img/menu_icon2.png" alt=""><span>Ustawienia</span></li>
+            <li id="menu_item2"><img src="/static/img/menu_icon2.png" alt=""><span>Wejścia</span></li>
             <li id="menu_item3"><img src="/static/img/menu_icon3.png" alt=""><span>Harmonogramy</span></li>
         </ul>
     </div>
@@ -38,87 +38,175 @@
                 <li id="container1_item5">Czujnik ruchu</li>
                 <li id="container1_item6">Kierunek wiatru</li>
                 <li id="container1_item7">Siła wiatru</li>
+                <li id="container1_item8">RFID</li>
+                <li id="container1_item9">Światło</li>
+                
             </ul>
         </div>
         <div class="container1_right">
             <div>
                 <div id="container1_box1" class="active_container">
-                    Temperatura na zewnątrz wynosi: 
-                    <p id=result>
-                        {{temp}}
-                    </p>°C
-                
-                <div id="my_dataviz"></div>
+                    <div>
+                        Temperatura na zewnątrz wynosi: 
+                        <p id=result>
+                            {{temp_out}}
+                        </p>
+                    </div>
+                <!--<div id="my_dataviz"></div>-->
+                    <div>
+                        Temperatura wewnątrz wynosi: 
+                        <p id=result1>
+                            {{temp_in}}
+                        </p>
+                        <!--<a href="/dash/">tutaj</a>-->
+                    </div>
+                    <form action="" method="post" style="margin: 3em 0;">
+                        Podaj temperaturę którą ma śledzić termostat:
+                        <input type="text" class="form-control" placeholder="temperatura" name="temp" value="{{request.form.temp}}">
+                        <input class="button_sub" type="submit" value="wyślij">
+                    </form>
                     
-                    Temperatura wewnątrz wynosi: 
-                    <p id=result>
-                        {{temp2}}
-                    </p>°C
-                <div id="my_dataviz"></div>
+                        <label style="display:flex; flex-direction:column;text-align: center;">ogrzewanie
+                            <button type="button" onclick="loadDoc()" id="temp_up">włącz</button>
+                            <button type="button" onclick="loadDoc()" id="temp_down">wyłącz</button>
+                        </label>
+                    
+                <!--<div id="my_dataviz"></div>-->
                 <!--<canvas id="myChart" width="400" height="400"></canvas>-->
                 
  
                 </div>
                 <div id="container1_box2">
-                    Aktualna wilgotność na zewnątrz wynosi:
-                    <p id=result2>
-                        {{hum}}
-                    </p>
-                    Aktualna wilgotność wewnątrz wynosi:
-                    <p id=result2>
-                        {{hum2}}
-                    </p>
+                    <div>
+                        Aktualna wilgotność na zewnątrz wynosi:
+                        <p id=result2>
+                            {{hum_out}}
+                        </p>
+                    </div>
+                    
+                    <div>
+                        Aktualna wilgotność wewnątrz wynosi:
+                        <p id=result3>
+                            {{hum_in}}
+                        </p>
+                    </div>
+                    <label>Wentylator:&nbsp;<input type="checkbox" id="wentylator">wł/wył</label>
                 </div>
                 
                 <div id="container1_box3">
-                    Aktualny poziom Co2 na zewnątrz :
-                    <p id=result4>
-                        {{co2}}
-                    </p>
-                    Aktualny poziom Co2 wewnątrz :
-                    <p id=result4>
-                        {{co22}}
-                    </p>
+                    <div>
+                        Aktualny poziom Co2 na zewnątrz :
+                        <p id=result4>
+                            {{co2_out}}
+                        </p>
+                    </div>
+                    <div>
+                        Aktualny poziom Co2 wewnątrz :
+                        <p id=result5>
+                            {{co2_in}}
+                        </p>
+                    </div>
+                    
                 </div>
                 
                 <div id="container1_box4">
                     Aktualny procent wypełnienia:
-                    <p id=result5>{{percent}}</p>
+                    <p id=result6>{{level}}</p>
                 </div>
                 
                 <div id="container1_box5">
-                    Stan czujnika Pir salon: 
-                    <p id=result3>
-                        {{move}}
-                    </p>
-                    Stan czujnika Pir wejście: 
-                    <p id=result3>
-                        {{move2}}
-                    </p>
-                    Stan czujnika Pir garaż: 
-                    <p id=result3>
-                        {{move3}}
-                    </p>
+                    <div>
+                        Stan czujnika Pir salon: 
+                        <p id=result7>
+                            {{pir}}
+                            <img src="" class="pir_icon">
+                        </p>
+                       
+
+
+                           
+                        
+
+                        
+
+
+                    </div>
+                    <div>
+                        Stan czujnika Pir wejście: 
+                        <p id=result8>
+                            {{pir2}}
+                        </p>
+                    </div>
+                    <div>
+                        Stan czujnika Pir garaż: 
+                        <p id=result9>
+                            {{pir3}}
+                        </p>
+                    </div>
                 </div>
                 
                 <div id="container1_box6">
                     Kierunek wiatru to:
-                    <p id=result6>
-                    {{direction}}
+                    <p id=result10>
+                    {{windd}}
                     </p>
                 </div>
                 
                 <div id="container1_box7">
                     Siła wiatru to:
-                    <p id=result7>
-                    {{strenght}}
+                    <p id=result11>
+                    {{winds}}
                     </p>
                 </div>
+                
+                <div id="container1_box8">
+                    Ostatni odczyt RFID:
+                    <p id=result12>
+                    {{rfid}}
+                    </p>
+                </div>
+                
+                <div id="container1_box9">
+                    Poziom naświetlenia:
+                    <p id=result16>
+                    {{light}}
+                    </p>
+                    <label class="switch">Światło drzwi:&nbsp;
+  <input type="checkbox" id="drzwi">
+  <span class="slider"></span>
+</label>
+                    <label>Światło drzwi:&nbsp;<input type="checkbox" id="drzwi"></label>
+                    <label>Światło salon:&nbsp;<input type="checkbox" id="salon"></label>
+                    <label>Światło korytarz:&nbsp;<input type="checkbox" id="korytarz"></label>
+                    <label style="display:flex; flex-direction:column;margin:3em 0;text-align: center;">okno <button type="button" onclick="loadDoc('window_up')" id="window_up">W górę</button><button type="button" onclick="loadDoc('window_down')" id="window_down">W dół</button></label>
+                    <label style="display:flex; flex-direction:column;margin:3em 0;text-align: center;">roleta<button type="button" onclick="loadDoc('blind_up')" id="blind_up">W górę</button><button type="button" onclick="loadDoc('blind_down')" id="blind_down">W dół</button></label>
+                </div>
+                
+                
+                
             </div>
         </div>
     </div>
-    <div class="container2">2</div>
-    <div class="container3">3</div>
+        <div class="container2" id="container2">2 <p id=result13>{{move}}</p> <p id=result14>{{move2}}</p> <p id=result15>{{move3}}</p></div>
+    <div class="container3">3
+                    <form action="/dash2/" method="post" style="margin: 3em 0;">
+                        Podaj temperaturę którą ma śledzić termostat:
+                        <input type="text" class="form-control" placeholder="temperatura" name="temp" value="{{request.form.temp}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="day" value="{{request.form.day}}">
+                        <input class="button_sub" type="submit" value="wyślij">
+                    </form>
+
+<form action="/dash3/" method="post" style="margin: 3em 0;">
+                        Podaj temperaturę którą ma śledzić termostat:
+                        <input type="text" class="form-control" placeholder="temperatura" name="temp" value="{{request.form.temp}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="day" value="{{request.form.day}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="start" value="{{request.form.start}}">
+                        <input type="text" class="form-control" placeholder="dzień" name="end" value="{{request.form.end}}">
+                        <input class="button_sub" type="submit" value="wyślij">
+                    </form>
+                    
+        
+        </div>
 
     </div>
     
@@ -166,6 +254,8 @@
                   $("#container1_box5").removeClass("active_container");
                   $("#container1_box6").removeClass("active_container");
                   $("#container1_box7").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
                 });
                 
                 $("#container1_item2").click(function(){
@@ -176,6 +266,8 @@
                   $("#container1_box5").removeClass("active_container");
                   $("#container1_box6").removeClass("active_container");
                   $("#container1_box7").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
                 });
                 
                 $("#container1_item3").click(function(){
@@ -186,6 +278,8 @@
                   $("#container1_box5").removeClass("active_container");
                   $("#container1_box6").removeClass("active_container");
                   $("#container1_box7").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
                 });
                 
                 $("#container1_item4").click(function(){
@@ -196,6 +290,8 @@
                   $("#container1_box5").removeClass("active_container");
                   $("#container1_box6").removeClass("active_container");
                   $("#container1_box7").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
                 });
                 
                 $("#container1_item5").click(function(){
@@ -206,6 +302,8 @@
                   $("#container1_box4").removeClass("active_container");
                   $("#container1_box6").removeClass("active_container");
                   $("#container1_box7").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
                 });
                 
                 $("#container1_item6").click(function(){
@@ -216,6 +314,9 @@
                   $("#container1_box4").removeClass("active_container");
                   $("#container1_box5").removeClass("active_container");
                   $("#container1_box7").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
+
                 });
                 
                 $("#container1_item7").click(function(){
@@ -226,8 +327,31 @@
                   $("#container1_box4").removeClass("active_container");
                   $("#container1_box5").removeClass("active_container");
                   $("#container1_box6").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
                 });
-                
+                $("#container1_item8").click(function(){
+                  $("#container1_box8").addClass("active_container");
+                  $("#container1_box1").removeClass("active_container");
+                  $("#container1_box2").removeClass("active_container");
+                  $("#container1_box3").removeClass("active_container");
+                  $("#container1_box4").removeClass("active_container");
+                  $("#container1_box5").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
+                  $("#container1_box9").removeClass("active_container");
+                });
+                $("#container1_item9").click(function(){
+                  $("#container1_box9").addClass("active_container");
+                  $("#container1_box1").removeClass("active_container");
+                  $("#container1_box2").removeClass("active_container");
+                  $("#container1_box3").removeClass("active_container");
+                  $("#container1_box4").removeClass("active_container");
+                  $("#container1_box5").removeClass("active_container");
+                  $("#container1_box6").removeClass("active_container");
+                  $("#container1_box7").removeClass("active_container");
+                  $("#container1_box8").removeClass("active_container");
+                });
                 </script>
         <script src="/static/js/script.js" ></script>
         <script type=text/javascript>
@@ -258,19 +382,32 @@
        //         }, 2000)
  const box1 = document.querySelector('#container1_box1');
  const box2 = document.querySelector('#container1_box2');
- const box3 = document.querySelector('#container1_box3');                   
+ const box3 = document.querySelector('#container1_box3');
+ const box4 = document.querySelector('#container1_box4');
+ const box5 = document.querySelector('#container1_box5');
+ const box6 = document.querySelector('#container1_box6');
+ const box7 = document.querySelector('#container1_box7');
+ const box8 = document.querySelector('#container1_box8');
+ const box9 = document.querySelector('#container1_box9');
+ const box10 = document.querySelector('#container2');
  let updateCheck = setInterval(function updateProperty() {
         
      if(box1.classList.contains("active_container"))
                 {
+                    
                     $.getJSON('/background_process', function(data) {
-                        $("#result").text(data.temperature);
+                        var text=data.temperature_out+" °C";
+                        $("#result").text(text);
+                        $("#result1").text(data.temperature_in+" °C");
                         });
+                    
                 }
+     
       else if(box2.classList.contains("active_container"))
                 {
                     $.getJSON('/background_process', function(data) {
-                        $("#result2").text(data.humidity);
+                        $("#result2").text(data.humidity_out+" %");
+                        $("#result3").text(data.humidity_in+" %");
                         });
                 }
                   
@@ -278,7 +415,67 @@
       else if(box3.classList.contains("active_container"))
                 {
                     $.getJSON('/background_process', function(data) {
-                        $("#result4").text(data.co2);
+                        $("#result4").text(data.co2_out+" PPM");
+                        $("#result5").text(data.co2_in+" PPM");
+                        });
+                }
+     else if(box4.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
+                        $("#result6").text(data.level+" %");
+                        });
+                }
+     else if(box5.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
+                        console.log(data.pir);
+                        if(data.pir==0){
+                         $("#result7 img").attr("src","/static/img/pir/standing-up-man-.png");
+                            console.log(data.pir);
+                            $("#result7 img").css("border-color","#1afc00");
+                            $("#result7 img").css("display","block");
+                        }
+                        else if(data.pir==1){
+                        $("#result7 img").attr("src","/static/img/pir/man-walking.png");
+                            $("#result7 img").css("border-color","#ff0000");
+                            $("#result7 img").css("display","block");
+                            console.log(data.pir);
+                        }
+                        $("#result8").text(data.pir2);
+                        $("#result9").text(data.pir3);
+                        });
+                }
+     else if(box6.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
+                        $("#result10").text(data.windd);
+                        });
+                }
+     else if(box7.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
+                        $("#result11").text(data.winds+" km/h");
+                        });
+                }
+     else if(box8.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
+                        $("#result12").text(data.rfid);
+                        });
+                }
+     else if(box9.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
+                        $("#result16").text(data.light);
+                        
+                        });
+                }
+     else if(box10.classList.contains("active_container"))
+                {
+                    $.getJSON('/background_process', function(data) {
+                        $("#result13").text(data.movement);
+                        $("#result14").text(data.movement2);
+                        $("#result15").text(data.movement3);
                         });
                 }
                   
@@ -390,5 +587,170 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/da
 })
 
 </script>
+<script>
+
+    function loadDoc(value) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+        if(value=='blind_up'){
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V69?value=0", true);
+  xhttp.send();
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V68?value=1", true);
+  xhttp.send();
+            
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V68?value=0", true);
+  xhttp.send();
+            
+        }
+        else if(value=='blind_down'){
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V68?value=0", true);
+  xhttp.send();
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V69?value=1", true);
+  xhttp.send();
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V69?value=0", true);
+  xhttp.send();
+        }
+        else if(value=='window_up'){
+             xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V71?value=0", true);
+  xhttp.send();
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V70?value=1", true);
+  xhttp.send();
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V70?value=0", true);
+  xhttp.send();
+        }
+        else if(value=='window_down'){
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V70?value=0", true);
+  xhttp.send();
+            setTimeout(() => {   xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V71?value=1", true);
+  xhttp.send();}
+            , 2000);
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V71?value=0", true);
+  xhttp.send();
+        }
+        else if(value=='temp_up'){
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V24?value=1", true);
+  xhttp.send();
+        }
+        else if(value=='temp_down'){
+            xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V24?value=0", true);
+  xhttp.send();
+        }
+  //xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V66?value=1", true);
+  //xhttp.send();
+}
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+  var checkbox = document.querySelector('#drzwi');
+  var checkbox2 = document.querySelector('#salon');
+  var checkbox3 = document.querySelector('#korytarz');
+  var checkbox4 = document.querySelector('#wentylator');
+
+  checkbox.addEventListener('change', function () {
+    if (checkbox.checked) {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V65?value=1", true);
+  xhttp.send();
+      console.log('Checked');
+    } else {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V65?value=0", true);
+  xhttp.send();
+      console.log('Not checked');
+    }
+  });
+        
+        
+    checkbox2.addEventListener('change', function () {
+    if (checkbox2.checked) {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V66?value=1", true);
+  xhttp.send();
+      console.log('Checked');
+    } else {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V66?value=2", true);
+  xhttp.send();
+      console.log('Not checked');
+    }
+  });
+        
+        
+    checkbox3.addEventListener('change', function () {
+    if (checkbox3.checked) {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V67?value=1", true);
+  xhttp.send();
+      console.log('Checked');
+    } else {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V67?value=0", true);
+  xhttp.send();
+      console.log('Not checked');
+    }
+  });
+    
+        checkbox4.addEventListener('change', function () {
+    if (checkbox4.checked) {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V27?value=2", true);
+  xhttp.send();
+      console.log('Checked');
+    } else {
+      var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "http://108.59.81.89:8080/iDP2biz4a0erZXDaMpuJaSLvbhc3mcon/update/V27?value=3", true);
+  xhttp.send();
+      console.log('Not checked');
+    }
+  });
+        
+        
+});
+</script>
+    
     </body>
 </html>

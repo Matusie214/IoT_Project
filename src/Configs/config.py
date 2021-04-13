@@ -1,4 +1,4 @@
-broker_ip="34.123.208.229"
+broker_ip="108.59.81.89"
 broker_port=1883
 db_name="smart_home_data"
 path_data_temperature="./../Data/Temperature.csv"
